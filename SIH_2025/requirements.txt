@@ -1,3 +1,7 @@
+streamlit
 pandas
-python-dotenv
-requests      # optional, if you want webhook notifications
+scikit-learn
+xgboost
+imblearn
+joblib
+plotly
