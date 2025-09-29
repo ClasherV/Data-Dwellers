@@ -1,3 +1,4 @@
+
 import os
 import numpy as np 
 import pandas as pd 
@@ -5,12 +6,36 @@ import streamlit as st
 import plotly.express as px 
 import plotly.graph_objects as go
 import requests
+import threading
+import time
+from app import app
 import base64
 import smtplib
 from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from Model import predict_risk 
+import subprocess
+import sys
+import time
+import atexit
+import shutil
+
+
+# Start Flask backend
+flask_process = subprocess.Popen([sys.executable, "app.py"])
+time.sleep(2)  # give Flask a moment to start
+
+def cleanup():
+    print("🛠 Cleaning up Flask process...")
+    flask_process.terminate()  # stop Flask
+    flask_process.wait()
+    shutil.rmtree("uploads", ignore_errors=True)
+    print("✅ Cleanup done.")
+
+atexit.register(cleanup)
+
+
 
 
 def send_to_backend(uploaded_file):
@@ -94,34 +119,40 @@ def compute_risk(row, config):
 
 
 def send_email_report(to_email, student_data):
-    sender_email = "vaibhavraikwar505@gmail.com"  
-    sender_password = "bivl vgkn atwc ufby"       
-    subject = f"Dropout Risk Alert: {student_data.get('student_name','Unknown')}"
-
-    body = f"""
-    Dear Mentor/Guardian,
-
-    Student: {student_data.get('student_name','Unknown')}
-    Risk Score: {student_data.get('risk_score',0):.2f}
-    Risk Level: {student_data.get('risk_flag','N/A')}
-
-    Key Factors:
-    - Attendance Factor: {student_data.get('att_factor',0):.2f}
-    - Assessment Factor: {student_data.get('ass_factor',0):.2f}
-    - Fee Factor: {student_data.get('fee_factor',0):.2f}
-    - Attempts Factor: {student_data.get('attempts_factor',0):.2f}
-
-    Please consider early intervention.
-
-    Regards,
-    Dropout Prediction System
     """
+    Send a plain text email using credentials stored in st.secrets.
+    Requires .streamlit/secrets.toml with [gmail] sender_email and app_password
+    """
+    try:
+        sender_email = st.secrets["gmail"]["sender_email"]
+        sender_password = st.secrets["gmail"]["app_password"]
+    except Exception:
+        st.error("Email credentials not configured in st.secrets; cannot send email.")
+        return False
 
+    subject = f"Dropout Risk Alert: {student_data.get('student_name','Unknown')}"
+    body = f"""
+Dear Mentor/Guardian,
+
+Student: {student_data.get('student_name','Unknown')}
+Risk Score: {student_data.get('risk_score',0):.2f}
+Risk Level: {student_data.get('risk_flag','N/A')}
+
+Key Factors:
+- Attendance Factor: {student_data.get('att_factor',0):.2f}
+- Assessment Factor: {student_data.get('ass_factor',0):.2f}
+- Fee Factor: {student_data.get('fee_factor',0):.2f}
+- Attempts Factor: {student_data.get('attempts_factor',0):.2f}
+
+Please consider early intervention.
+
+Regards,
+Dropout Prediction System
+"""
     msg = MIMEMultipart()
     msg['From'] = sender_email
     msg['To'] = to_email
     msg['Subject'] = subject
-
     msg.attach(MIMEText(body, 'plain'))
 
     try:
@@ -317,17 +348,35 @@ elif option == "Performance Table":
             st.write("-----")
             st.subheader("✉ Send Email Alert❗")
             student_to_email = st.selectbox("Select student to email", results_to_show['student_id'].tolist())
-            email_input = st.text_input("Enter Guardian/Mentor Email")
+            # email_input = st.button("Send Email")
+
+            # if email_input:
             if st.button("Send Email for Selected Student"):
-                if not email_input:
-                    st.error("Please enter an email address.")
-                else:
-                    stu_row = results_to_show[results_to_show['student_id'] == student_to_email].iloc[0].to_dict()
-                    success = send_email_report(email_input, stu_row)
-                    if success:
-                        st.success(f"Email sent successfully to {email_input}")
-                    else:
-                        st.error("Failed to send email. Please check SMTP settings.")
+                i = 1
+                at_risk_students = df[df['risk_flag'].isin(["🟡", "🔴"])]
+                for _, student in at_risk_students.iterrows():
+                    to_email = "vaibhavraikwar505@gmail.com"
+                    if to_email:  # check if email exists
+                        success = send_email_report(to_email, student)
+                        if success:
+                            st.success(f"Email sent successfully to {to_email}")
+                        else:
+                            st.error("Failed to send email. Please check SMTP settings.")
+                        i+=1
+                        if i>3:
+                            break
+
+
+            # if st.button("Send Email for Selected Student"):
+            #     if not email_input:
+            #         st.error("Please enter an email address.")
+            #     else:
+            #         stu_row = results_to_show[results_to_show['student_id'] == student_to_email].iloc[0].to_dict()
+            #         success = send_email_report(email_input, stu_row)
+            #         if success:
+            #             st.success(f"Email sent successfully to {email_input}")
+            #         else:
+            #             st.error("Failed to send email. Please check SMTP settings.")
 
         with col6:
             st.subheader("📊 Student Risk Visualization")
