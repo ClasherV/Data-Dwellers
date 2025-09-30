@@ -1,10 +1,18 @@
 from flask import Flask, request, jsonify
+import joblib
+import pandas as pd
 import os
 
 app = Flask(__name__)
 
+# Load models (choose which one you want)
+best_model = joblib.load("best_model.pkl")
+calibrated_model = joblib.load("calibrated_model.pkl")
+model = calibrated_model   # currently using calibrated
+
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
@@ -19,6 +27,23 @@ def upload_file():
     file.save(filepath)
     
     return jsonify({"message": "File uploaded successfully", "path": filepath}), 200
+
+
+
+@app.route("/save_config", methods=["POST"])
+def save_config():
+    try:
+        config = request.json  # Receive config dict
+
+        # Save it as config.json in the same folder
+        with open("config.json", "w") as f:
+            import json
+            json.dump(config, f, indent=4)
+
+        return jsonify({"message": "Config saved successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

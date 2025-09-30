@@ -8,10 +8,30 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import plotly.graph_objects as go #type:ignore
-from Model import predict_risk   # model import
 import requests #type:ignore
 from streamlit_modal import Modal #type:ignore
+from TestingModel import ml_model
 import re
+import subprocess
+import sys
+import time
+import atexit
+import shutil
+
+
+# Start Flask backend
+flask_process = subprocess.Popen([sys.executable, "app.py"])
+time.sleep(2)  # give Flask a moment to start
+
+def cleanup():
+    print("🛠 Cleaning up Flask process...")
+    flask_process.terminate()  # stop Flask
+    flask_process.wait()
+    shutil.rmtree("uploads", ignore_errors=True)
+    print("✅ Cleanup done.")
+
+atexit.register(cleanup)
+
 
 #themes
 if 'dark_mode' not in st.session_state:
@@ -470,13 +490,14 @@ st.sidebar.markdown("**➡️ Set Threshold**")
 att_threshold = st.sidebar.slider("Attendance Threshold", 0.0, 1.0, 0.75)
 score_threshold = st.sidebar.slider("Score Threshold (e.g., 0.4 for 40%)", 0.0, 1.0, 0.4)
 fee_overdue_days = st.sidebar.number_input("Fee Overdue Days Threshold", 0, 180, 30)
-max_attempts = st.sidebar.number_input("Max Exam Attempts Allowed", 1, 10, 5)
+max_attempts = st.sidebar.number_input("Max Exam Attempts Allowed", 1, 7, 4)
 
 st.sidebar.markdown("**➡️ Set Weightages**")
 w_att = st.sidebar.slider("Weight: Attendance", 0.0, 1.0, 0.3)
 w_ass = st.sidebar.slider("Weight: Assessment Score", 0.0, 1.0, 0.4)
 w_fee = st.sidebar.slider("Weight: Fee/Delay", 0.0, 1.0, 0.2)
 w_attempts = st.sidebar.slider("Weight: Attempts/Failures", 0.0, 1.0, 0.1)
+w_fee_delay = st.sidebar.slider("Weight: Fee Overdue Days", 0.0, 1.0, 0.1)
 
 config = {
     'att_threshold': att_threshold,
@@ -486,10 +507,11 @@ config = {
     'w_att': w_att,
     'w_ass': w_ass,
     'w_fee': w_fee,
+    'w_fee_delay': w_fee_delay,
     'w_attempts': w_attempts
 }
 
-tab1, tab2, tab3 = st.tabs(["Upload File","Performance Table","Dashboard"])
+tab1, tab2, tab3 = st.tabs(["📂 Upload", "📊 Performance Table", "📈 Dashboard"])
 
 def extract_risk_emoji(val):
     if pd.isna(val):
@@ -547,8 +569,13 @@ with tab1:
             
             if file:
                 st.session_state.assessment_subjects[subject_key] = pd.read_csv(file)
+                send_to_backend(file)
             elif subject_key in st.session_state.assessment_subjects:
                 pass
+
+    
+
+
     # Info Modal
     if "notice_open" not in st.session_state:
         st.session_state.notice_open=True
@@ -596,7 +623,7 @@ with tab2:
 
             # run Model or Heuristic
             try:
-                model_results = predict_risk(master_df) 
+                model_results = ml_model()
                 if isinstance(model_results, pd.DataFrame) and 'Risk_Level' in model_results.columns:
                     st.success("✅ Model processed successfully! Using model output.")
                     results_to_show = model_results.copy()
@@ -637,6 +664,7 @@ with tab2:
             if 'avg_all_marks' in display_df.columns:
                 display_df['avg_all_marks'] = display_df['avg_all_marks'].map('{:.1f}'.format)
 
+            # display_df = pd.read_csv('student_dropout_risk_analysis.csv')
             st.dataframe(display_df, hide_index=True)
             st.markdown("___")
 
@@ -751,7 +779,7 @@ with tab3:
 
             if master_df is not None and not master_df.empty:
                 try:
-                    model_results = predict_risk(master_df)
+                    model_results = ml_model()
                     if isinstance(model_results, pd.DataFrame) and 'Risk_Level' in model_results.columns:
                         results_to_show = model_results.copy()
                         results_to_show['Risk_Level'] = results_to_show['Risk_Level'].apply(extract_risk_emoji).astype(str)

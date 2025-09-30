@@ -1,0 +1,101 @@
+Roll_no,Name,Dropout_Probability,Dropout_Probability_Percentage,Risk_Level,Risk_Score,attendance_percentage,fee_paid_ratio,total_failed_attempts,avg_all_marks,subjects_with_failures,payment_delay_days,marks_below_40,failure_rate,low_attendance,very_low_attendance,Recommendations
+1,Aayush Rama,0.46422650664157156,46.42,Low Risk,1,66.667,0.874,0,47.714,0,15,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+2,Heer Kalla,0.5186450576554898,51.86,Medium Risk,2,40.0,0.568,0,63.762,0,119,4,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+3,Arhaan Borde,0.5316837170734471,53.17,Medium Risk,2,63.333,0.07,0,57.905,0,-25,4,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+4,Anahita Singh,0.5263958157028701,52.64,Medium Risk,2,53.333,0.24,0,54.619,0,-125,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+5,Khushi Zacharia,0.5111038269670614,51.11,Medium Risk,2,33.333,0.182,0,54.429,0,-77,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+6,Ishita Datta,0.5031622993282916,50.32,Medium Risk,2,50.0,0.362,0,44.238,0,39,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+7,Farhan Ahuja,0.4442947225555982,44.43,Low Risk,1,53.333,0.781,0,57.286,0,-74,5,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+8,Indranil Soman,0.46117217573263947,46.12,Low Risk,1,50.0,0.774,0,36.381,0,91,15,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+9,Mishti Desai,0.4494260356746295,44.94,Low Risk,1,36.667,0.673,0,45.714,0,-263,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+10,Ivan Bala,0.5808140787749607,58.08,Medium Risk,2,43.333,0.03,1,49.476,1,5,8,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+11,Divij Ramanathan,0.5184140554499608,51.84,Medium Risk,2,56.667,0.27,1,43.81,1,-35,9,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+12,Vedika Bandi,0.5246120319600571,52.46,Medium Risk,2,56.667,0.186,0,48.524,0,-166,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+13,Advik Kaur,0.5163285889010008,51.63,Medium Risk,2,56.667,0.56,0,53.429,0,108,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+14,Nitara Chakrabarti,0.5492034248131697,54.92,Medium Risk,2,40.0,0.446,1,55.048,1,-145,7,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+15,Parinaaz Sangha,0.4432930149167142,44.33,Low Risk,1,36.667,0.797,0,52.667,0,-19,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+16,Rania Mangat,0.4969962629379616,49.7,Low Risk,1,43.333,0.095,0,51.19,0,-118,8,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+17,Jayesh Kapur,0.48539623121370645,48.54,Low Risk,1,60.0,0.439,0,40.429,0,-197,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+18,Kabir Bhatt,0.5281181014178035,52.81,Medium Risk,2,46.667,0.327,0,53.429,0,-236,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+19,Aayush Swamy,0.567109069475213,56.71,Medium Risk,2,36.667,0.142,1,49.048,1,-3,7,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+20,Yuvaan Batra,0.4660540475336253,46.61,Low Risk,1,56.667,0.681,0,51.762,0,48,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+21,Zain Kala,0.4438651721789452,44.39,Low Risk,1,66.667,0.914,0,51.571,0,8,7,0.0,0,0,Monitor attendance regularly
+22,Akarsh Chaudry,0.5048531681571155,50.49,Medium Risk,2,43.333,0.142,0,44.429,0,70,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+23,Diya Trivedi,0.5724151778148955,57.24,Medium Risk,2,33.333,0.054,1,45.238,1,40,7,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+24,Azad Saran,0.5204807170568246,52.05,Medium Risk,2,50.0,0.459,0,51.714,0,263,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+25,Zain Devi,0.5492006173374655,54.92,Medium Risk,2,40.0,0.191,0,49.571,0,-62,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+26,Ira Sarraf,0.5314237103406989,53.14,Medium Risk,2,56.667,0.504,1,55.571,1,-215,5,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+27,Indranil Jayaraman,0.4182644547849641,41.83,Low Risk,1,30.0,0.94,0,45.857,0,-213,11,0.0,0,0,Monitor attendance regularly
+28,Shlok Walia,0.4179452837423824,41.79,Low Risk,1,50.0,0.917,0,46.619,0,-60,11,0.0,0,0,Monitor attendance regularly
+29,Charvi Vala,0.5176566747279904,51.77,Medium Risk,2,46.667,0.439,0,51.048,0,217,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+30,Anay Kapur,0.503042967288659,50.3,Medium Risk,2,66.667,0.253,1,45.81,1,-76,10,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+31,Hrishita Edwin,0.43074920697848607,43.07,Low Risk,1,56.667,0.798,0,55.571,0,-101,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+32,Saksham Thakkar,0.5018372594243885,50.18,Medium Risk,2,43.333,0.172,0,48.619,0,-307,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+33,Ira Bail,0.5258578471114465,52.59,Medium Risk,2,40.0,0.418,0,52.619,0,27,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+34,Taran Balan,0.472260974763946,47.23,Low Risk,1,56.667,0.479,0,50.19,0,-197,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+35,Lavanya Raman,0.5393890316778351,53.94,Medium Risk,2,53.333,0.12,0,63.667,0,-106,5,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+36,Samaira Walia,0.5196028426873365,51.96,Medium Risk,2,26.667,0.42,2,48.952,2,-184,9,0.095,0,0,Monitor attendance regularly; Ensure fee payments are timely
+37,Suhana Jayaraman,0.5096117905985343,50.96,Medium Risk,2,60.0,0.591,1,51.952,1,-250,6,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+38,Saanvi Bala,0.4507522779351592,45.08,Low Risk,1,56.667,0.639,0,42.095,0,-154,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+39,Mamooty Dave,0.5201475036909042,52.01,Medium Risk,2,60.0,0.296,0,52.238,0,58,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+40,Hansh Mangal,0.5037390795472182,50.37,Medium Risk,2,56.667,0.442,0,51.429,0,-70,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+41,Riaan Rau,0.5448008656213341,54.48,Medium Risk,2,43.333,0.311,1,43.429,1,116,11,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+42,Kaira Sule,0.4848989374410963,48.49,Low Risk,1,46.667,0.85,0,57.619,0,81,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+43,Reyansh Badal,0.5406571363728323,54.07,Medium Risk,2,36.667,0.108,0,51.143,0,-131,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+44,Shalv Kapadia,0.49059577966315177,49.06,Low Risk,1,56.667,0.141,0,46.619,0,-250,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+45,Siya Ahuja,0.534806328794461,53.48,Medium Risk,2,40.0,0.274,0,50.524,0,21,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+46,Trisha Gade,0.4181988113187574,41.82,Low Risk,1,60.0,0.718,0,49.429,0,-73,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+47,Mehul Roy,0.47925168914478744,47.93,Low Risk,1,53.333,0.399,0,46.143,0,-15,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+48,Samaira Ramaswamy,0.42975384605691874,42.98,Low Risk,1,56.667,0.831,0,43.333,0,-270,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+49,Biju Upadhyay,0.4367967471471397,43.68,Low Risk,1,50.0,0.742,0,51.619,0,-209,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+50,Uthkarsh Trivedi,0.45804300180686813,45.8,Low Risk,1,53.333,0.751,0,44.095,0,69,11,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+51,Chirag Goyal,0.5246487378857918,52.46,Medium Risk,2,60.0,0.826,3,45.286,3,116,9,0.143,0,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+52,Rasha Khatri,0.42756698292860873,42.76,Low Risk,1,36.667,0.843,0,58.524,0,-166,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+53,Taran Wali,0.5230819730334854,52.31,Medium Risk,2,43.333,0.047,0,52.0,0,50,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+54,Pranay Maharaj,0.4442093263956224,44.42,Low Risk,1,53.333,0.77,0,45.714,0,-123,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+55,Hridaan Jayaraman,0.5336682485982956,53.37,Medium Risk,2,30.0,0.001,0,35.143,0,-58,13,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+56,Jivika Kibe,0.47068893424114483,47.07,Low Risk,1,60.0,0.383,0,54.19,0,-31,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+57,Taran Manda,0.46588788620565597,46.59,Low Risk,1,66.667,0.735,0,50.143,0,150,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+58,Vaibhav Kashyap,0.4873343057447961,48.73,Low Risk,1,33.333,0.243,0,48.238,0,-43,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+59,Mannat Rajan,0.5058902242758254,50.59,Medium Risk,2,46.667,0.489,0,43.857,0,66,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+60,Vaibhav Chakraborty,0.4852264702904705,48.52,Low Risk,1,56.667,0.39,0,43.857,0,233,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+61,Divyansh Dutt,0.4564085112239191,45.64,Low Risk,1,53.333,0.604,0,60.19,0,-68,5,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+62,Hrishita Barad,0.5154976324460209,51.55,Medium Risk,2,50.0,0.077,0,50.524,0,161,8,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+63,Anya Mani,0.4690396288058606,46.9,Low Risk,1,46.667,0.698,0,46.524,0,81,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+64,Taimur Bumb,0.4926413063873811,49.26,Low Risk,1,40.0,0.728,1,50.476,1,-229,8,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+65,Nirvi Golla,0.495041776585423,49.5,Low Risk,1,53.333,0.229,0,42.048,0,-184,11,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+66,Mannat Kuruvilla,0.47989751690950755,47.99,Low Risk,1,60.0,0.717,0,53.286,0,237,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+67,Stuvan Rajagopalan,0.47442948071541213,47.44,Low Risk,1,56.667,0.603,0,35.333,0,42,11,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+68,Tiya Dugar,0.42431799383095786,42.43,Low Risk,1,46.667,0.877,0,51.286,0,-68,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+69,Armaan Ram,0.42194852954529105,42.19,Low Risk,1,53.333,0.855,0,54.857,0,-41,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+70,Parinaaz Dutt,0.45212980142963477,45.21,Low Risk,1,30.0,0.657,0,54.952,0,-5,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+71,Anika Divan,0.4882628901628926,48.83,Low Risk,1,46.667,0.789,0,43.857,0,11,8,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+72,Ritvik Bajwa,0.436157181374721,43.62,Low Risk,1,36.667,0.7,0,49.095,0,-148,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+73,Pari Kamdar,0.5173519295879302,51.74,Medium Risk,2,33.333,0.323,0,60.19,0,-190,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+74,Advik Loke,0.49809599591795634,49.81,Low Risk,1,60.0,0.207,0,44.619,0,-121,11,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+75,Anahi Mann,0.42093435105454463,42.09,Low Risk,1,56.667,0.918,0,57.714,0,-63,7,0.0,0,0,Monitor attendance regularly
+76,Mamooty Bains,0.430423729750689,43.04,Low Risk,1,50.0,0.858,0,48.238,0,-144,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+77,Ranbir Sharma,0.5348179602001443,53.48,Medium Risk,2,50.0,0.41,1,49.857,1,-21,9,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+78,Himmat Saini,0.48497643539228963,48.5,Low Risk,1,43.333,0.241,0,50.952,0,-74,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+79,Mahika Bajaj,0.5378526725948907,53.79,Medium Risk,2,43.333,0.062,0,47.857,0,-220,7,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+80,Pari Korpal,0.4968920011451068,49.69,Low Risk,1,46.667,0.124,0,47.952,0,-54,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+81,Keya Majumdar,0.4372897271288133,43.73,Low Risk,1,46.667,0.897,0,43.476,0,-165,10,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+82,Samaira Sidhu,0.4357414164301568,43.57,Low Risk,1,43.333,0.709,0,47.238,0,-27,11,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+83,Tiya Kalla,0.4851389772913613,48.51,Low Risk,1,66.667,0.41,0,49.952,0,-241,8,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+84,Samaira Mangat,0.4543872113485671,45.44,Low Risk,1,60.0,0.59,0,55.0,0,-21,9,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+85,Mahika Singh,0.514340398624726,51.43,Medium Risk,2,56.667,0.313,0,32.667,0,131,13,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+86,Yashvi Chopra,0.544715221087859,54.47,Medium Risk,2,53.333,0.495,1,37.095,1,-66,13,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+87,Riaan Doctor,0.42666982763962485,42.67,Low Risk,1,46.667,0.985,0,50.19,0,-193,7,0.0,0,0,Monitor attendance regularly
+88,Himmat Dugar,0.5242399004646805,52.42,Medium Risk,2,53.333,0.148,0,52.524,0,-115,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+89,Mishti Dhar,0.45930200751757166,45.93,Low Risk,1,43.333,0.899,0,49.81,0,34,8,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+90,Vidur Upadhyay,0.4494851933024682,44.95,Low Risk,1,43.333,0.923,0,53.095,0,81,8,0.0,0,0,Monitor attendance regularly
+91,Rania Yogi,0.464192891606215,46.42,Low Risk,1,30.0,0.954,1,45.0,1,-30,9,0.048,0,0,Monitor attendance regularly
+92,Prerak Sama,0.4925973586675721,49.26,Low Risk,1,50.0,0.645,0,56.333,0,138,5,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+93,Rati Issac,0.46882567926307683,46.88,Low Risk,1,50.0,0.726,0,38.095,0,-98,12,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+94,Shaan Rajagopalan,0.503579374283672,50.36,Medium Risk,2,30.0,0.579,1,41.429,1,-161,10,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+95,Kiaan Bala,0.5176498438249072,51.76,Medium Risk,2,56.667,0.103,0,59.286,0,-89,6,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+96,Gatik Som,0.46265324799976043,46.27,Low Risk,1,46.667,0.915,0,50.238,0,139,8,0.0,0,0,Monitor attendance regularly
+97,Abram Karpe,0.48995806495909877,49.0,Low Risk,1,43.333,0.976,1,46.333,1,40,10,0.048,0,0,Monitor attendance regularly
+98,Faiyaz Sachar,0.5474043347218244,54.74,Medium Risk,2,33.333,0.041,1,44.333,1,-30,8,0.048,0,0,Monitor attendance regularly; Ensure fee payments are timely
+99,Miraya Mangal,0.5477880368317819,54.78,Medium Risk,2,50.0,0.057,0,51.952,0,48,8,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely
+100,Eshani Kota,0.4299732893655015,43.0,Low Risk,1,56.667,0.673,0,52.381,0,-250,8,0.0,0,0,Monitor attendance regularly; Ensure fee payments are timely

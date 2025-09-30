@@ -1,1 +1,7 @@
 .streamlit\secrets.toml
+venv
+__pycache__
+.vscode
+dropout_pred.ipynb
+dropout_risk_analysis_summary.txt
+Rough.py
