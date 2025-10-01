@@ -20,17 +20,17 @@ import shutil
 
 
 # Start Flask backend
-flask_process = subprocess.Popen([sys.executable, "app.py"])
-time.sleep(2)  # give Flask a moment to start
+# flask_process = subprocess.Popen([sys.executable, "app.py"])
+# time.sleep(2)  # give Flask a moment to start
 
-def cleanup():
-    print("🛠 Cleaning up Flask process...")
-    flask_process.terminate()  # stop Flask
-    flask_process.wait()
-    shutil.rmtree("uploads", ignore_errors=True)
-    print("✅ Cleanup done.")
+# def cleanup():
+#     print("🛠 Cleaning up Flask process...")
+#     flask_process.terminate()  # stop Flask
+#     flask_process.wait()
+#     shutil.rmtree("uploads", ignore_errors=True)
+#     print("✅ Cleanup done.")
 
-atexit.register(cleanup)
+# atexit.register(cleanup)
 
 
 #themes
@@ -416,8 +416,8 @@ def compute_risk_new(row, config):
     return risk, flag, att_factor, ass_factor, fee_factor, attempts_factor, recommendation
 
 def send_email_report(to_email, student_data):
-    sender_email = "youremail@example.com"
-    sender_password = "yourpassword"
+    sender_email = st.secrets["gmail"]["sender_email"]
+    sender_password = st.secrets["gmail"]["app_password"]
     
     student_name = student_data.get('Name', 'Unknown')
     risk_score = student_data.get('Risk_Score', 0)
@@ -443,7 +443,7 @@ def send_email_report(to_email, student_data):
     {recommendation}
 
     Key Factors:
-    - Attendance Percentage: {att_percent * 100:.2f}%
+    - Attendance Percentage: {att_percent:.2f}%
     - Fee Paid Ratio: {fee_ratio:.2f}
     - Failed Attempts (Total): {failed_attempts}
     - Average Marks: {avg_marks:.2f}
@@ -490,7 +490,7 @@ st.sidebar.markdown("**➡️ Set Threshold**")
 att_threshold = st.sidebar.slider("Attendance Threshold", 0.0, 1.0, 0.75)
 score_threshold = st.sidebar.slider("Score Threshold (e.g., 0.4 for 40%)", 0.0, 1.0, 0.4)
 fee_overdue_days = st.sidebar.number_input("Fee Overdue Days Threshold", 0, 180, 30)
-max_attempts = st.sidebar.number_input("Max Exam Attempts Allowed", 1, 7, 4)
+max_attempts = st.sidebar.number_input("Max Exam Attempts Allowed", 1, 7, 5)
 
 st.sidebar.markdown("**➡️ Set Weightages**")
 w_att = st.sidebar.slider("Weight: Attendance", 0.0, 1.0, 0.3)
@@ -538,17 +538,17 @@ with tab1:
     student_file = st.file_uploader("1. Upload Student Master Data CSV", type=["csv"], key="student_file")
     if student_file:
         st.session_state.student_df = pd.read_csv(student_file)
-        send_to_backend(student_file)
+        # send_to_backend(student_file)
 
     att_file = st.file_uploader("2. Upload Attendance Data CSV", type=["csv"], key="att_file")
     if att_file:
         st.session_state.att_df = pd.read_csv(att_file)
-        send_to_backend(att_file)
+        # send_to_backend(att_file)
 
     fees_file = st.file_uploader("3. Upload Fees Data CSV", type=["csv"], key="fees_file")
     if fees_file:
         st.session_state.fees_df = pd.read_csv(fees_file)
-        send_to_backend(fees_file)
+        # send_to_backend(fees_file)
 
     num_subjects = st.number_input(
         "4. Specify Number of Assessment Subjects", 
@@ -569,26 +569,27 @@ with tab1:
             
             if file:
                 st.session_state.assessment_subjects[subject_key] = pd.read_csv(file)
-                send_to_backend(file)
+                # send_to_backend(file)
             elif subject_key in st.session_state.assessment_subjects:
                 pass
+    
 
     
 
 
     # Info Modal
-    if "notice_open" not in st.session_state:
-        st.session_state.notice_open=True
-        modal.open()
-    if modal.is_open():
-        with modal.container():
-            st.markdown("""
-            Ensure CSV files have correct headers!
+    # if "notice_open" not in st.session_state:
+    #     st.session_state.notice_open=True
+    #     modal.open()
+    # if modal.is_open():
+    #     with modal.container():
+    #         st.markdown("""
+    #         Ensure CSV files have correct headers!
 
-            """)
-            st.image("images\popup.jpg", 
-            caption="Example CSV Format", 
-            use_container_width=True)
+    #         """)
+    #         st.image("images\popup.jpg", 
+    #         caption="Example CSV Format", 
+    #         use_container_width=True)
 #performance table section
 with tab2:
     student = st.session_state.get('student_df')
@@ -609,6 +610,7 @@ with tab2:
     master_df = None 
 
     if required_files_present:
+    # if True:
         st.header("🎓 Dropout Risk Prediction Table")
 
         # merge DataFrames
@@ -619,11 +621,9 @@ with tab2:
             master_df = None
 
         if master_df is not None and not master_df.empty:
-            st.write("⚙ Running model/heuristic...")
-
-            # run Model or Heuristic
             try:
-                model_results = ml_model()
+
+                model_results = pd.read_csv('student_dropout_risk_analysis.csv')
                 if isinstance(model_results, pd.DataFrame) and 'Risk_Level' in model_results.columns:
                     st.success("✅ Model processed successfully! Using model output.")
                     results_to_show = model_results.copy()
@@ -633,7 +633,7 @@ with tab2:
                 else:
                     raise ValueError("Model not returning valid output.")
             except Exception as e:
-                st.warning(f"❌ ML Model failed or unavailable. Falling back to heuristic risk calculation. Error: {e}")
+                st.warning(f"❌ ML Model failed or unavailable. Error: {e}")
                 
                 # Heuristic Fallback
                 risk_results = master_df.apply(lambda r: compute_risk_new(r, config), axis=1)
@@ -649,7 +649,7 @@ with tab2:
 
             st.subheader("📃 All Students Risk Data")
             
-            display_cols_list = ['Roll_no','Name','Risk_Level','Risk_Score','Dropout_Probability_Percentage','attendance_percentage','avg_all_marks','fee_paid_ratio','total_failed_attempts', 'Recommendations']
+            display_cols_list = ['Roll_no','Name','Dropout_Probability_Percentage','Risk_Level','Risk_Score','attendance_percentage','avg_all_marks','fee_paid_ratio','total_failed_attempts', 'Recommendations']
             display_cols = [c for c in display_cols_list if c in results_to_show.columns]
             
             display_df = results_to_show[display_cols].copy()
@@ -658,36 +658,34 @@ with tab2:
             if 'Dropout_Probability_Percentage' in display_df.columns:
                 display_df['Dropout_Probability_Percentage'] = display_df['Dropout_Probability_Percentage'].map('{:.1f}%'.format)
             if 'attendance_percentage' in display_df.columns:
-                display_df['attendance_percentage'] = (display_df['attendance_percentage'].astype(float) * 100).map('{:.1f}%'.format)
+                display_df['attendance_percentage'] = (display_df['attendance_percentage'].astype(float)).map('{:.1f}%'.format)
             if 'fee_paid_ratio' in display_df.columns:
                 display_df['fee_paid_ratio'] = display_df['fee_paid_ratio'].map('{:.2f}'.format)
             if 'avg_all_marks' in display_df.columns:
                 display_df['avg_all_marks'] = display_df['avg_all_marks'].map('{:.1f}'.format)
-
-            # display_df = pd.read_csv('student_dropout_risk_analysis.csv')
+            
+            
             st.dataframe(display_df, hide_index=True)
             st.markdown("___")
-
             # Filters
             st.subheader("👥 Filter Students")
             risk_count = results_to_show['Risk_Level'].value_counts()
             label_map = {"Low Risk": "🟢","Medium Risk": "🟡","High Risk": "🔴"}
+            risk_level_choice = st.selectbox("Select Risk Level", ["All"] + list(label_map.keys()))
             
-            present_risk_levels = [name for emoji, name in label_map.items() if emoji in risk_count.index]
-            risk_level_choice = st.selectbox("Select Risk Level", ["All"] + present_risk_levels)
-            
-            filtered = results_to_show.copy()
             if risk_level_choice != "All":
-                emoji_value = next((k for k, v in label_map.items() if v == risk_level_choice), None)
-                if emoji_value:
-                    filtered = results_to_show[results_to_show['Risk_Level'] == emoji_value]
+                emoji_value = label_map[risk_level_choice]
+                filtered = results_to_show[results_to_show['Risk_Level'] == emoji_value]
+            else:
+                filtered = results_to_show
             
             if not filtered.empty:
                 filtered_display_df = display_df[display_df['Roll_no'].isin(filtered['Roll_no'])].copy()
                 st.dataframe(filtered_display_df, hide_index=True)
             else:
-                 st.info("No students match the selected filter.")
+                st.info("No students match the selected filter.")
             st.markdown("___")
+            
 
             col5, col6=st.columns(2)
             with col5:
@@ -696,32 +694,52 @@ with tab2:
                 st.download_button("Download High Risk Students CSV", red_students.to_csv(index=False), "high_risk_students.csv")
 
                 st.write("-----")
-                st.subheader("✉ Send Email Alert❗")
-                
+                st.subheader("✉ Send Email Alerts ❗")
                 if not results_to_show.empty:
-                    student_to_email = st.selectbox(
-                        "Select student to email", 
-                        results_to_show['Roll_no'].tolist(), 
-                        format_func=lambda x: f"{x} - {results_to_show[results_to_show['Roll_no'] == x]['Name'].iloc[0]}",
-                        key='email_student_select'
-                    )
-                    
-                    stu_row_details = student[student['Roll_no'] == student_to_email]
-                    stu_row_risk = results_to_show[results_to_show['Roll_no'] == student_to_email].iloc[0]
-                    
-                    default_email = stu_row_details['Email(Parent)'].iloc[0] if 'Email(Parent)' in stu_row_details.columns and not stu_row_details.empty else ""
+                # Filter only medium and high risk students
+                    risky_students = results_to_show[results_to_show['Risk_Level'].isin(['🟡', '🔴'])]
+                
+                    if not risky_students.empty:
+                        if st.button("📨 Send Alerts to All Medium/High Risk Parents"):
+                        # if st.button("📨 Send Test Alerts (First 3 students → My Email)"):
+                            sent_count = 0
+                            failed_count = 0
 
-                    email_input = st.text_input("Enter Guardian/Mentor Email", value=default_email, key='email_input')
-                    
-                    if st.button("Send Email for Selected Student", key='send_email_button'):
-                        if not email_input:
-                            st.error("Please enter an email address.")
-                        else:
-                            success = send_email_report(email_input, stu_row_risk.to_dict())
-                            if success:
-                                st.success(f"Email alert sent successfully to {email_input}")
+
+                            for idx, (_, row) in enumerate(risky_students.iterrows()):
+                                if idx >= 3:   # stop after first 3 students
+                                    break
+                            
+                            # for _, row in risky_students.iterrows():
+                            #     roll_no = row['Roll_no']
+                            #     student_details = student[student['Roll_no'] == roll_no]
+                
+                                roll_no = row['Roll_no']
+                                student_details = student[student['Roll_no'] == roll_no]
+                
+                                if 'Parent_Email' in student_details.columns and not student_details.empty:
+                                    parent_email = student_details['Parent_Email'].iloc[0]
+                
+                                    if parent_email:
+                                        success = send_email_report(parent_email, row.to_dict())
+                                        if success:
+                                            sent_count += 1
+                                        else:
+                                            failed_count += 1
+                                    else:
+                                        failed_count += 1
+                                else:
+                                    failed_count += 1
+                
+                            st.success(f"✅ Emails sent.")
+                            # st.success(f"✅ Test emails sent for {sent_count} students.")
+                            if failed_count > 0:
+                                st.warning(f"⚠ Failed to send {failed_count} emails (missing/invalid addresses).")
+                    else:
+                        st.info("No Medium/High risk students found.")
                 else:
-                    st.info("No students available for emailing.")
+                    st.info("No students available for emailing.")              
+
 
             with col6:
                 st.subheader("📊 Student Risk Visualization")
