@@ -18,7 +18,6 @@ import time
 import atexit
 import shutil
 
-
 # Start Flask backend
 # flask_process = subprocess.Popen([sys.executable, "app.py"])
 # time.sleep(2)  # give Flask a moment to start
@@ -622,7 +621,6 @@ with tab2:
 
         if master_df is not None and not master_df.empty:
             try:
-
                 model_results = pd.read_csv('student_dropout_risk_analysis.csv')
                 if isinstance(model_results, pd.DataFrame) and 'Risk_Level' in model_results.columns:
                     st.success("✅ Model processed successfully! Using model output.")
@@ -694,7 +692,7 @@ with tab2:
                 st.download_button("Download High Risk Students CSV", red_students.to_csv(index=False), "high_risk_students.csv")
 
                 st.write("-----")
-                st.subheader("✉ Send Email Alerts ❗")
+                st.subheader("✉️ Send Email Alerts ❗")
                 if not results_to_show.empty:
                 # Filter only medium and high risk students
                     risky_students = results_to_show[results_to_show['Risk_Level'].isin(['🟡', '🔴'])]
@@ -734,11 +732,12 @@ with tab2:
                             st.success(f"✅ Emails sent.")
                             # st.success(f"✅ Test emails sent for {sent_count} students.")
                             if failed_count > 0:
-                                st.warning(f"⚠ Failed to send {failed_count} emails (missing/invalid addresses).")
+                                st.warning(f"⚠️ Failed to send {failed_count} emails (missing/invalid addresses).")
                     else:
                         st.info("No Medium/High risk students found.")
                 else:
-                    st.info("No students available for emailing.")              
+                    st.info("No students available for emailing.")   
+                st.markdown("___")           
 
 
             with col6:
@@ -760,7 +759,7 @@ with tab2:
                                 color_discrete_map={k: v for k, v in zip(display_labels, colors)})
                                 
                     fig.update_traces(textinfo="percent+label", textfont=dict(color="black", size=14, family="Arial"))
-                    fig.update_layout(width=310,height=380,margin=dict(l=20, r=20, t=20, b=20), showlegend=True,legend_title="Risk Levels")
+                    fig.update_layout(width=310,height=300,margin=dict(l=20, r=20, t=20, b=20), showlegend=True,legend_title="Risk Levels")
                     st.plotly_chart(fig, use_container_width=True)
                 else:
                     st.info("No valid risk-flag data available to plot.")
@@ -1021,8 +1020,15 @@ with tab3:
 
         with chart_col4:
             st.markdown("##### 4. Overall Risk Profile 🕸 (Radar Chart)")
-            
-            if 'att_factor' in stu_data and 'ass_factor' in stu_data:
+            att_factor, ass_factor, fee_factor, attempts_factor = compute_factors_new(stu_data, config)
+
+            stu_data['att_factor'] = att_factor
+            stu_data['ass_factor'] = ass_factor
+            stu_data['fee_factor'] = fee_factor
+            stu_data['attempts_factor'] = attempts_factor
+
+            if all(factor in stu_data for factor in ['att_factor', 'ass_factor', 'fee_factor', 'attempts_factor']):
+                
                 categories = ['Attendance', 'Assessment', 'Fees', 'Attempts']
                 values = [
                     stu_data['att_factor'],
@@ -1030,14 +1036,14 @@ with tab3:
                     stu_data['fee_factor'],
                     stu_data['attempts_factor']
                 ]
-                
-                values = values + values[:1] 
-                categories = categories + categories[:1]
+
+                values_closed = values + [values[0]]
+                categories_closed = categories + [categories[0]] 
 
                 fig_radar = go.Figure(data=[
                     go.Scatterpolar(
-                        r=values,
-                        theta=categories,
+                        r=values_closed,
+                        theta=categories_closed,
                         fill='toself',
                         name=stu_data['Name'],
                         line_color=risk_colors.get(stu_data_risk_name, 'gray'),
@@ -1049,16 +1055,27 @@ with tab3:
                     polar=dict(
                         radialaxis=dict(
                             visible=True,
-                            range=[0, 1] 
-                        )),
+                            range=[0, 1],
+                            tickvals=[0.0, 0.5, 1.0], 
+                            tickmode='array',
+                            showline=False
+                        ),
+                        angularaxis=dict(
+                            direction = "clockwise", 
+                            period = len(categories)
+                        )
+                    ),
                     showlegend=False,
-                    title_text="Risk Profile (0=Low Risk, 1=High Risk)",
+                    title_text=f"Risk Profile (0=Low, 1=High Risk)",
                     height=350,
                     margin=dict(t=50, b=5, l=5, r=5)
                 )
                 st.plotly_chart(fig_radar, use_container_width=True)
             else:
+
                 st.warning("Risk factor breakdown not available. (Heuristic model factors missing)")
+
+
 
         st.markdown("---")
         st.markdown("### Cohort Analysis: Student Performance Distribution")
@@ -1110,41 +1127,39 @@ with tab3:
 
             st.plotly_chart(fig_box, use_container_width=True)
 
-        else:
-            st.warning("Cannot display score distribution (Box Plot): Average marks are zero or missing for most students. Falling back to simple Risk Score comparison.")
-            st.markdown("##### 5. Student Risk Score Comparison (Bar Chart)")
+        st.markdown("##### 5. Student Risk Score Comparison (Bar Chart)")
 
-            df_for_chart['Name_Roll'] = df_for_chart['Name'] + ' (' + df_for_chart['Roll_no'].astype(str) + ')'
-            
-            df_sorted = df_for_chart.sort_values('Risk_Score', ascending=False)
-            
-            risk_color_map = {"Low Risk": "green", "Medium Risk": "gold", "High Risk": "red"}
+        df_for_chart['Name_Roll'] = df_for_chart['Name'] + ' (' + df_for_chart['Roll_no'].astype(str) + ')'
+        
+        df_sorted = df_for_chart.sort_values('Risk_Score', ascending=False)
+        
+        risk_color_map = {"Low Risk": "green", "Medium Risk": "gold", "High Risk": "red"}
 
-            fig_bar = px.bar(
-                df_sorted,
-                x='Name_Roll',
-                y='Risk_Score',
-                color='Risk_Name',
-                color_discrete_map=risk_color_map,
-                title="Individual Student Risk Scores (0 to 1)",
-                labels={
-                    'Name_Roll': 'Student',
-                    'Risk_Score': 'Dropout Risk Score (0 = Low, 1 = High)'
-                },
-                height=550
-            )
+        fig_bar = px.bar(
+            df_sorted,
+            x='Name_Roll',
+            y='Risk_Score',
+            color='Risk_Name',
+            color_discrete_map=risk_color_map,
+            title="Individual Student Risk Scores (0 to 1)",
+            labels={
+                'Name_Roll': 'Student',
+                'Risk_Score': 'Dropout Risk Score (0 = Low, 1 = High)'
+            },
+            height=550
+        )
 
-            fig_bar.add_hline(y=0.7, line_dash="dash", line_color="red", annotation_text="High Risk Threshold", annotation_position="top left")
-            fig_bar.add_hline(y=0.4, line_dash="dash", line_color="gold", annotation_text="Medium Risk Threshold", annotation_position="top left")
+        fig_bar.add_hline(y=0.7, line_dash="dash", line_color="red", annotation_text="High Risk Threshold", annotation_position="top left")
+        fig_bar.add_hline(y=0.4, line_dash="dash", line_color="gold", annotation_text="Medium Risk Threshold", annotation_position="top left")
 
-            fig_bar.update_layout(
-                xaxis={'categoryorder':'array', 'categoryarray': df_sorted['Name_Roll'].tolist()},
-                xaxis_tickangle=-45,
-                showlegend=True,
-                margin=dict(b=100)
-            )
+        fig_bar.update_layout(
+            xaxis={'categoryorder':'array', 'categoryarray': df_sorted['Name_Roll'].tolist()},
+            xaxis_tickangle=-45,
+            showlegend=True,
+            margin=dict(b=100)
+        )
 
-            st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(fig_bar, use_container_width=True)
 
     else:
         st.info("Please upload all required files and ensure data is properly structured to see the dashboard.")
