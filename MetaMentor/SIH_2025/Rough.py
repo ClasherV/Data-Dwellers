@@ -416,8 +416,8 @@ def compute_risk_new(row, config):
     return risk, flag, att_factor, ass_factor, fee_factor, attempts_factor, recommendation
 
 def send_email_report(to_email, student_data):
-    sender_email = "youremail@example.com"
-    sender_password = "yourpassword"
+    sender_email = st.secrets["gmail"]["sender_email"]
+    sender_password = st.secrets["gmail"]["app_password"]
     
     student_name = student_data.get('Name', 'Unknown')
     risk_score = student_data.get('Risk_Score', 0)
@@ -443,7 +443,7 @@ def send_email_report(to_email, student_data):
     {recommendation}
 
     Key Factors:
-    - Attendance Percentage: {att_percent * 100:.2f}%
+    - Attendance Percentage: {att_percent:.2f}%
     - Fee Paid Ratio: {fee_ratio:.2f}
     - Failed Attempts (Total): {failed_attempts}
     - Average Marks: {avg_marks:.2f}
@@ -608,8 +608,8 @@ with tab2:
     results_to_show = None 
     master_df = None 
 
-    # if required_files_present:
-    if True:
+    if required_files_present:
+    # if True:
         st.header("🎓 Dropout Risk Prediction Table")
 
         # merge DataFrames
@@ -619,8 +619,8 @@ with tab2:
             st.error(f"Error merging or processing data. Check if 'Roll_no' and other core columns exist in all files. Error: {e}")
             master_df = None
 
-        # if master_df is not None and not master_df.empty:
-        if True:
+        if master_df is not None and not master_df.empty:
+        # if True:
             st.write("⚙ Running model/heuristic...")
 
             # run Model or Heuristic
@@ -696,437 +696,458 @@ with tab2:
                 st.download_button("Download High Risk Students CSV", red_students.to_csv(index=False), "high_risk_students.csv")
 
                 st.write("-----")
-                st.subheader("✉ Send Email Alert❗")
-                
+                st.subheader("✉ Send Email Alerts ❗")
                 if not results_to_show.empty:
-                    student_to_email = st.selectbox(
-                        "Select student to email", 
-                        results_to_show['Roll_no'].tolist(), 
-                        format_func=lambda x: f"{x} - {results_to_show[results_to_show['Roll_no'] == x]['Name'].iloc[0]}",
-                        key='email_student_select'
-                    )
-                    
-                    stu_row_details = student[student['Roll_no'] == student_to_email]
-                    stu_row_risk = results_to_show[results_to_show['Roll_no'] == student_to_email].iloc[0]
-                    
-                    default_email = stu_row_details['Email(Parent)'].iloc[0] if 'Email(Parent)' in stu_row_details.columns and not stu_row_details.empty else ""
+                # Filter only medium and high risk students
+                    risky_students = results_to_show[results_to_show['Risk_Level'].isin(['🟡', '🔴'])]
+                
+                    if not risky_students.empty:
+                        if st.button("📨 Send Alerts to All Medium/High Risk Parents"):
+                        # if st.button("📨 Send Test Alerts (First 3 students → My Email)"):
+                            sent_count = 0
+                            failed_count = 0
 
-                    email_input = st.text_input("Enter Guardian/Mentor Email", value=default_email, key='email_input')
-                    
-                    if st.button("Send Email for Selected Student", key='send_email_button'):
-                        if not email_input:
-                            st.error("Please enter an email address.")
-                        else:
-                            success = send_email_report(email_input, stu_row_risk.to_dict())
-                            if success:
-                                st.success(f"Email alert sent successfully to {email_input}")
+
+                            # for idx, (_, row) in enumerate(risky_students.iterrows()):
+                            #     if idx >= 3:   # stop after first 3 students
+                            #         break
+                            
+                            for _, row in risky_students.iterrows():
+                                roll_no = row['Roll_no']
+                                student_details = student[student['Roll_no'] == roll_no]
+                
+                                roll_no = row['Roll_no']
+                                student_details = student[student['Roll_no'] == roll_no]
+                
+                                if 'Parent_Email' in student_details.columns and not student_details.empty:
+                                    parent_email = student_details['Parent_Email'].iloc[0]
+                
+                                    if parent_email:
+                                        success = send_email_report(parent_email, row.to_dict())
+                                        if success:
+                                            sent_count += 1
+                                        else:
+                                            failed_count += 1
+                                    else:
+                                        failed_count += 1
+                                else:
+                                    failed_count += 1
+                
+                            st.success(f"✅ Emails sent.")
+                            # st.success(f"✅ Test emails sent for {sent_count} students.")
+                            if failed_count > 0:
+                                st.warning(f"⚠ Failed to send {failed_count} emails (missing/invalid addresses).")
+                    else:
+                        st.info("No Medium/High risk students found.")
                 else:
-                    st.info("No students available for emailing.")
+                    st.info("No students available for emailing.")              
 
-#             with col6:
-#                 st.subheader("📊 Student Risk Visualization")
-#                 if isinstance(risk_count, pd.Series) and not risk_count.empty:
-#                     color_map_emoji = {"🔴": "red","🟡": "gold","🟢": "green"} 
-#                     label_map_rev = {"🔴": "High Risk","🟡": "Medium Risk","🟢": "Low Risk"}
+
+            with col6:
+                st.subheader("📊 Student Risk Visualization")
+                if isinstance(risk_count, pd.Series) and not risk_count.empty:
+                    color_map_emoji = {"🔴": "red","🟡": "gold","🟢": "green"} 
+                    label_map_rev = {"🔴": "High Risk","🟡": "Medium Risk","🟢": "Low Risk"}
                     
-#                     valid_risks = risk_count.index[risk_count.index.isin(label_map_rev.keys())]
-#                     risk_count = risk_count[valid_risks]
+                    valid_risks = risk_count.index[risk_count.index.isin(label_map_rev.keys())]
+                    risk_count = risk_count[valid_risks]
 
-#                     labels = risk_count.index.tolist()
-#                     values = risk_count.values.tolist()
+                    labels = risk_count.index.tolist()
+                    values = risk_count.values.tolist()
                     
-#                     display_labels = [label_map_rev.get(label, label) for label in labels]
-#                     colors = [color_map_emoji.get(label, 'grey') for label in labels]
+                    display_labels = [label_map_rev.get(label, label) for label in labels]
+                    colors = [color_map_emoji.get(label, 'grey') for label in labels]
 
-#                     fig = px.pie(names=display_labels, values=values, color=display_labels, 
-#                                 color_discrete_map={k: v for k, v in zip(display_labels, colors)})
+                    fig = px.pie(names=display_labels, values=values, color=display_labels, 
+                                color_discrete_map={k: v for k, v in zip(display_labels, colors)})
                                 
-#                     fig.update_traces(textinfo="percent+label", textfont=dict(color="black", size=14, family="Arial"))
-#                     fig.update_layout(width=310,height=380,margin=dict(l=20, r=20, t=20, b=20), showlegend=True,legend_title="Risk Levels")
-#                     st.plotly_chart(fig, use_container_width=True)
-#                 else:
-#                     st.info("No valid risk-flag data available to plot.")
-#         else:
-#              st.info("Data processed, but the resulting DataFrame is empty. Check your input files' 'Roll_no' column for mismatches.")
+                    fig.update_traces(textinfo="percent+label", textfont=dict(color="black", size=14, family="Arial"))
+                    fig.update_layout(width=310,height=380,margin=dict(l=20, r=20, t=20, b=20), showlegend=True,legend_title="Risk Levels")
+                    st.plotly_chart(fig, use_container_width=True)
+                else:
+                    st.info("No valid risk-flag data available to plot.")
+        else:
+             st.info("Data processed, but the resulting DataFrame is empty. Check your input files' 'Roll_no' column for mismatches.")
 
-#     else:
-#         st.info("Please upload the Student Master Data, Attendance, Fees, and at least one Subject Assessment file to see the performance table.")
+    else:
+        st.info("Please upload the Student Master Data, Attendance, Fees, and at least one Subject Assessment file to see the performance table.")
 
-# #dashboard section
-# with tab3:
-#     st.subheader("📊 Student Dashboard")
-#     if 'results_to_show' not in locals() or results_to_show is None or results_to_show.empty or 'Risk_Level' not in results_to_show.columns:
+#dashboard section
+with tab3:
+    st.subheader("📊 Student Dashboard")
+    if 'results_to_show' not in locals() or results_to_show is None or results_to_show.empty or 'Risk_Level' not in results_to_show.columns:
         
-#         student = st.session_state.get('student_df')
-#         att = st.session_state.get('att_df')
-#         ass_subjects = st.session_state.get('assessment_subjects', {})
-#         fees = st.session_state.get('fees_df')
+        student = st.session_state.get('student_df')
+        att = st.session_state.get('att_df')
+        ass_subjects = st.session_state.get('assessment_subjects', {})
+        fees = st.session_state.get('fees_df')
 
-#         has_valid_ass_data = any(df is not None and not df.empty for df in ass_subjects.values())
+        has_valid_ass_data = any(df is not None and not df.empty for df in ass_subjects.values())
         
-#         required_files_present = (
-#             student is not None and not student.empty and
-#             att is not None and not att.empty and
-#             fees is not None and not fees.empty and 
-#             has_valid_ass_data
-#         )
+        required_files_present = (
+            student is not None and not student.empty and
+            att is not None and not att.empty and
+            fees is not None and not fees.empty and 
+            has_valid_ass_data
+        )
         
-#         if required_files_present:
-#             try:
-#                 master_df = merge_dataframes(student, att, ass_subjects, fees)
-#             except Exception:
-#                 master_df = None
+        if required_files_present:
+            try:
+                master_df = merge_dataframes(student, att, ass_subjects, fees)
+            except Exception:
+                master_df = None
 
-#             if master_df is not None and not master_df.empty:
-#                 try:
-#                     model_results = ml_model()
-#                     if isinstance(model_results, pd.DataFrame) and 'Risk_Level' in model_results.columns:
-#                         results_to_show = model_results.copy()
-#                         results_to_show['Risk_Level'] = results_to_show['Risk_Level'].apply(extract_risk_emoji).astype(str)
-#                         if 'Dropout_Probability_Percentage' not in results_to_show.columns:
-#                             results_to_show['Dropout_Probability_Percentage'] = (results_to_show['Risk_Score'] * 100).round(2)
-#                     else:
-#                         raise ValueError("Model not returning valid output")
-#                 except Exception:
-#                     # Heuristic Fallback
-#                     risk_results = master_df.apply(lambda r: compute_risk_new(r, config), axis=1)
-#                     (master_df['Risk_Score'], master_df['Risk_Level'], master_df['att_factor'], 
-#                      master_df['ass_factor'], master_df['fee_factor'], master_df['attempts_factor'],
-#                      master_df['Recommendations']) = zip(*risk_results)
-#                     results_to_show = master_df.rename(columns={'Name': 'Name', 'Roll_no': 'Roll_no'}).copy()
-#                     results_to_show['Dropout_Probability_Percentage'] = (results_to_show['Risk_Score'] * 100).round(2)
-#             else:
-#                 results_to_show = None
-#         else:
-#             results_to_show = None
+            if master_df is not None and not master_df.empty:
+                try:
+                    model_results = ml_model()
+                    if isinstance(model_results, pd.DataFrame) and 'Risk_Level' in model_results.columns:
+                        results_to_show = model_results.copy()
+                        results_to_show['Risk_Level'] = results_to_show['Risk_Level'].apply(extract_risk_emoji).astype(str)
+                        if 'Dropout_Probability_Percentage' not in results_to_show.columns:
+                            results_to_show['Dropout_Probability_Percentage'] = (results_to_show['Risk_Score'] * 100).round(2)
+                    else:
+                        raise ValueError("Model not returning valid output")
+                except Exception:
+                    st.warning(f"❌ ML Model failed or unavailable. Error: {e}")
+                    # Heuristic Fallback
+                    # risk_results = master_df.apply(lambda r: compute_risk_new(r, config), axis=1)
+                    # (master_df['Risk_Score'], master_df['Risk_Level'], master_df['att_factor'], 
+                    #  master_df['ass_factor'], master_df['fee_factor'], master_df['attempts_factor'],
+                    #  master_df['Recommendations']) = zip(*risk_results)
+                    # results_to_show = master_df.rename(columns={'Name': 'Name', 'Roll_no': 'Roll_no'}).copy()
+                    # results_to_show['Dropout_Probability_Percentage'] = (results_to_show['Risk_Score'] * 100).round(2)
+            else:
+                results_to_show = None
+        else:
+            results_to_show = None
 
 
-#     if results_to_show is not None and not results_to_show.empty and 'Risk_Level' in results_to_show.columns:
+    if results_to_show is not None and not results_to_show.empty and 'Risk_Level' in results_to_show.columns:
 
-#         # kpis
-#         st.write("___")
-#         total_stu = len(results_to_show)
-#         risk_count = results_to_show['Risk_Level'].value_counts()
-#         high = risk_count.get("🔴",0)
-#         medium = risk_count.get("🟡",0)
-#         low = risk_count.get("🟢",0)
+        # kpis
+        st.write("___")
+        total_stu = len(results_to_show)
+        risk_count = results_to_show['Risk_Level'].value_counts()
+        high = risk_count.get("🔴",0)
+        medium = risk_count.get("🟡",0)
+        low = risk_count.get("🟢",0)
 
-#         col1,col2=st.columns(2)
-#         with col1:
-#             col3,col4=st.columns(2)
-#             with col3:
-#                 st.metric("**👥 Total Students**", total_stu)
-#                 st.metric("**🟡 Medium Risk Students**", medium)
-#             with col4:
-#                 st.metric("**🔴 High Risk Students**", high)
-#                 st.metric("**🟢 Low Risk Students**", low)
-#         with col2:
-#             high_risk_percent = (high/total_stu*100 if total_stu>0 else 0)
-#             fig=go.Figure(go.Indicator(
-#                 mode="gauge+number+delta", value=high_risk_percent, title={'text':"High Risk %"},
-#                 delta={'reference':20}, number={'suffix': "%"},
-#                 gauge={'axis':{'range':[0,100]},
-#                         'bar': {'color': "red"},
-#                         'steps': [
-#                             {'range': [0, 33], 'color': "lightgreen"},
-#                             {'range': [33, 66], 'color': "yellow"},
-#                             {'range': [66, 100], 'color': "red"}]}
-#                             ))
-#             fig.update_layout(width=150, height=150, margin=dict(l=5, r=5, t=40, b=5), paper_bgcolor="rgba(0,0,0,0)")
-#             st.plotly_chart(fig, use_container_width=True)
-#         st.write("___")
+        col1,col2=st.columns(2)
+        with col1:
+            col3,col4=st.columns(2)
+            with col3:
+                st.metric("**👥 Total Students**", total_stu)
+                st.metric("**🟡 Medium Risk Students**", medium)
+            with col4:
+                st.metric("**🔴 High Risk Students**", high)
+                st.metric("**🟢 Low Risk Students**", low)
+        with col2:
+            high_risk_percent = (high/total_stu*100 if total_stu>0 else 0)
+            fig=go.Figure(go.Indicator(
+                mode="gauge+number+delta", value=high_risk_percent, title={'text':"High Risk %"},
+                delta={'reference':20}, number={'suffix': "%"},
+                gauge={'axis':{'range':[0,100]},
+                        'bar': {'color': "red"},
+                        'steps': [
+                            {'range': [0, 33], 'color': "lightgreen"},
+                            {'range': [33, 66], 'color': "yellow"},
+                            {'range': [66, 100], 'color': "red"}]}
+                            ))
+            fig.update_layout(width=150, height=150, margin=dict(l=5, r=5, t=40, b=5), paper_bgcolor="rgba(0,0,0,0)")
+            st.plotly_chart(fig, use_container_width=True)
+        st.write("___")
 
-#         #student detail section
-#         st.subheader("Student Detail Analysis")
-#         student_choice = st.selectbox(
-#             "Select Student (Roll_no)", 
-#             results_to_show['Roll_no'].unique(), 
-#             format_func=lambda x: f"{x} - {results_to_show[results_to_show['Roll_no'] == x]['Name'].iloc[0]}", 
-#             key='dashboard_student_choice'
-#         )
-#         stu_data = results_to_show[results_to_show['Roll_no'] == student_choice].iloc[0]
+        #student detail section
+        st.subheader("Student Detail Analysis")
+        student_choice = st.selectbox(
+            "Select Student (Roll_no)", 
+            results_to_show['Roll_no'].unique(), 
+            format_func=lambda x: f"{x} - {results_to_show[results_to_show['Roll_no'] == x]['Name'].iloc[0]}", 
+            key='dashboard_student_choice'
+        )
+        stu_data = results_to_show[results_to_show['Roll_no'] == student_choice].iloc[0]
         
-#         _map = {"🟢": "Low Risk", "🟡": "Medium Risk", "🔴": "High Risk"}
-#         emoji = extract_risk_emoji(stu_data.get('Risk_Level'))
-#         stu_data_risk_name = _map.get(emoji, str(stu_data.get('Risk_Level')))
+        _map = {"🟢": "Low Risk", "🟡": "Medium Risk", "🔴": "High Risk"}
+        emoji = extract_risk_emoji(stu_data.get('Risk_Level'))
+        stu_data_risk_name = _map.get(emoji, str(stu_data.get('Risk_Level')))
 
-#         st.write(f"### {stu_data['Name']} ({stu_data['Roll_no']})")
-#         st.markdown(f"Risk Level: {stu_data.get('Risk_Level', 'N/A')} (Score: {stu_data.get('Risk_Score', 0):.2f})")
-#         st.markdown(f"Recommended Action: {stu_data.get('Recommendations', 'No specific recommendation.')}")
-#         st.write("---")
+        st.write(f"### {stu_data['Name']} ({stu_data['Roll_no']})")
+        st.markdown(f"Risk Level: {stu_data.get('Risk_Level', 'N/A')} (Score: {stu_data.get('Risk_Score', 0):.2f})")
+        st.markdown(f"Recommended Action: {stu_data.get('Recommendations', 'No specific recommendation.')}")
+        st.write("---")
 
-#         st.subheader("Individual Risk Factor Contribution")
+        st.subheader("Individual Risk Factor Contribution")
 
-#         # 2x2 Chart Layout
-#         chart_col1, chart_col2 = st.columns(2)
-#         chart_col3, chart_col4 = st.columns(2)
+        # 2x2 Chart Layout
+        chart_col1, chart_col2 = st.columns(2)
+        chart_col3, chart_col4 = st.columns(2)
         
-#         risk_colors = {"Low Risk": "#28a745", "Medium Risk": "#ffc107", "High Risk": "#dc3545"}
-#         with chart_col1:
-#             st.markdown("##### 1. Attendance Trend Over Time 📉 (Area Chart)")
+        risk_colors = {"Low Risk": "#28a745", "Medium Risk": "#ffc107", "High Risk": "#dc3545"}
+        with chart_col1:
+            st.markdown("##### 1. Attendance Trend Over Time 📉 (Area Chart)")
             
-#             att_df_clean = st.session_state.get('att_df')
+            att_df_clean = st.session_state.get('att_df')
             
-#             if att_df_clean is not None and not att_df_clean.empty and 'Roll_no' in att_df_clean.columns:
+            if att_df_clean is not None and not att_df_clean.empty and 'Roll_no' in att_df_clean.columns:
                 
-#                 date_cols = [col for col in att_df_clean.columns if '/' in col or '-' in col or pd.api.types.is_datetime64_any_dtype(pd.to_datetime(col, errors='ignore'))]
-#                 if not date_cols and len(att_df_clean.columns) > 2:
-#                     date_cols = att_df_clean.columns[2:].tolist()
+                date_cols = [col for col in att_df_clean.columns if '/' in col or '-' in col or pd.api.types.is_datetime64_any_dtype(pd.to_datetime(col, errors='ignore'))]
+                if not date_cols and len(att_df_clean.columns) > 2:
+                    date_cols = att_df_clean.columns[2:].tolist()
                 
-#                 if date_cols:
-#                     stu_att_df_long = att_df_clean[att_df_clean['Roll_no'] == student_choice][['Roll_no'] + date_cols].copy()
+                if date_cols:
+                    stu_att_df_long = att_df_clean[att_df_clean['Roll_no'] == student_choice][['Roll_no'] + date_cols].copy()
                     
-#                     if not stu_att_df_long.empty:
-#                         stu_att_df_long = stu_att_df_long.melt(id_vars=['Roll_no'], var_name='Date', value_name='Status')
-#                         stu_att_df_long['Date'] = pd.to_datetime(stu_att_df_long['Date'], errors='coerce')
-#                         stu_att_df_long['Status_Num'] = stu_att_df_long['Status'].astype(str).str.upper().replace({'P': 1, 'A': 0, '1': 1, '0': 0}).fillna(0)
+                    if not stu_att_df_long.empty:
+                        stu_att_df_long = stu_att_df_long.melt(id_vars=['Roll_no'], var_name='Date', value_name='Status')
+                        stu_att_df_long['Date'] = pd.to_datetime(stu_att_df_long['Date'], errors='coerce')
+                        stu_att_df_long['Status_Num'] = stu_att_df_long['Status'].astype(str).str.upper().replace({'P': 1, 'A': 0, '1': 1, '0': 0}).fillna(0)
                         
-#                         stu_att_df_long = stu_att_df_long.dropna(subset=['Date'])
-#                         stu_att_df_trend = stu_att_df_long.sort_values('Date').copy()
-#                         stu_att_df_trend['Cumulative_Present'] = stu_att_df_trend['Status_Num'].cumsum()
-#                         stu_att_df_trend['Cumulative_Days'] = range(1, len(stu_att_df_trend) + 1)
-#                         stu_att_df_trend['Attendance_Percentage'] = stu_att_df_trend['Cumulative_Present'] / stu_att_df_trend['Cumulative_Days']
+                        stu_att_df_long = stu_att_df_long.dropna(subset=['Date'])
+                        stu_att_df_trend = stu_att_df_long.sort_values('Date').copy()
+                        stu_att_df_trend['Cumulative_Present'] = stu_att_df_trend['Status_Num'].cumsum()
+                        stu_att_df_trend['Cumulative_Days'] = range(1, len(stu_att_df_trend) + 1)
+                        stu_att_df_trend['Attendance_Percentage'] = stu_att_df_trend['Cumulative_Present'] / stu_att_df_trend['Cumulative_Days']
                         
-#                         fig_att = px.area(stu_att_df_trend, x='Date', y='Attendance_Percentage',
-#                                         title="Cumulative Attendance % Trend",
-#                                         color_discrete_sequence=['#17a2b8']) 
+                        fig_att = px.area(stu_att_df_trend, x='Date', y='Attendance_Percentage',
+                                        title="Cumulative Attendance % Trend",
+                                        color_discrete_sequence=['#17a2b8']) 
                         
-#                         fig_att.update_layout(
-#                             yaxis_title="Attendance %", 
-#                             height=350, 
-#                             margin=dict(t=50, b=5, l=5, r=5),
-#                             yaxis_range=[0, 1]
-#                         )
-#                         st.plotly_chart(fig_att, use_container_width=True)
-#                     else:
-#                         st.warning("Attendance trend data not found for this student.")
-#                 else:
-#                     st.info("Attendance data has no proper date columns for trend analysis.")
-#             else:
-#                 st.warning("Attendance raw data (`att_df`) is missing or incomplete in session state.")
+                        fig_att.update_layout(
+                            yaxis_title="Attendance %", 
+                            height=350, 
+                            margin=dict(t=50, b=5, l=5, r=5),
+                            yaxis_range=[0, 1]
+                        )
+                        st.plotly_chart(fig_att, use_container_width=True)
+                    else:
+                        st.warning("Attendance trend data not found for this student.")
+                else:
+                    st.info("Attendance data has no proper date columns for trend analysis.")
+            else:
+                st.warning("Attendance raw data (`att_df`) is missing or incomplete in session state.")
 
-#         with chart_col2:
-#             st.markdown("##### 2. Assessment Grade Distribution / Average Score 📚")
+        with chart_col2:
+            st.markdown("##### 2. Assessment Grade Distribution / Average Score 📚")
 
-#             ass_subjects = st.session_state.get('assessment_subjects', {})
+            ass_subjects = st.session_state.get('assessment_subjects', {})
             
-#             stu_ass_data = []
-#             for subject, df in ass_subjects.items():
-#                 if isinstance(df, pd.DataFrame) and 'Roll_no' in df.columns and student_choice in df['Roll_no'].values:
-#                     stu_rows = df[df['Roll_no'] == student_choice]
-#                     score_col = next((col for col in stu_rows.columns if 'score' in col.lower() or 'mark' in col.lower()), None)
+            stu_ass_data = []
+            for subject, df in ass_subjects.items():
+                if isinstance(df, pd.DataFrame) and 'Roll_no' in df.columns and student_choice in df['Roll_no'].values:
+                    stu_rows = df[df['Roll_no'] == student_choice]
+                    score_col = next((col for col in stu_rows.columns if 'score' in col.lower() or 'mark' in col.lower()), None)
                     
-#                     if score_col:
-#                         scores = pd.to_numeric(stu_rows[score_col], errors='coerce').dropna().tolist()
-#                         for score in scores:
-#                             stu_ass_data.append({'Subject': subject.replace('subject_', 'Sub '), 'Score': score})
+                    if score_col:
+                        scores = pd.to_numeric(stu_rows[score_col], errors='coerce').dropna().tolist()
+                        for score in scores:
+                            stu_ass_data.append({'Subject': subject.replace('subject_', 'Sub '), 'Score': score})
                              
-#             ass_df = pd.DataFrame(stu_ass_data)
+            ass_df = pd.DataFrame(stu_ass_data)
             
-#             if not ass_df.empty and len(ass_df) > 1:
-#                 # Plot the strip plot (Box Plot)
-#                 fig_ass = px.strip(ass_df, y="Score", x="Subject",
-#                                  title="Grades Spread by Subject/Assignment",
-#                                  color="Subject",
-#                                  color_discrete_sequence=px.colors.qualitative.Dark2) 
+            if not ass_df.empty and len(ass_df) > 1:
+                # Plot the strip plot (Box Plot)
+                fig_ass = px.strip(ass_df, y="Score", x="Subject",
+                                 title="Grades Spread by Subject/Assignment",
+                                 color="Subject",
+                                 color_discrete_sequence=px.colors.qualitative.Dark2) 
                 
-#                 fig_ass.update_traces(jitter=1)
-#                 fig_ass.update_layout(
-#                     yaxis_title="Grade/Score", 
-#                     xaxis_title="Assessment Category",
-#                     height=350, 
-#                     margin=dict(t=50, b=5, l=5, r=5),
-#                     showlegend=False
-#                 )
-#                 st.plotly_chart(fig_ass, use_container_width=True)
-#             else:
-#                 avg_mark = stu_data.get('avg_all_marks', 0.0)
-#                 score_threshold_val = config.get('score_threshold', 0.4) * 100
+                fig_ass.update_traces(jitter=1)
+                fig_ass.update_layout(
+                    yaxis_title="Grade/Score", 
+                    xaxis_title="Assessment Category",
+                    height=350, 
+                    margin=dict(t=50, b=5, l=5, r=5),
+                    showlegend=False
+                )
+                st.plotly_chart(fig_ass, use_container_width=True)
+            else:
+                avg_mark = stu_data.get('avg_all_marks', 0.0)
+                score_threshold_val = config.get('score_threshold', 0.4) * 100
                 
-#                 bar_df = pd.DataFrame({
-#                     'Metric': ['Student Average Mark', 'Minimum Passing Mark'],
-#                     'Value': [avg_mark, score_threshold_val],
-#                     'Color': ['Student Score', 'Threshold']
-#                 })
+                bar_df = pd.DataFrame({
+                    'Metric': ['Student Average Mark', 'Minimum Passing Mark'],
+                    'Value': [avg_mark, score_threshold_val],
+                    'Color': ['Student Score', 'Threshold']
+                })
 
-#                 fig_ass_bar = px.bar(
-#                     bar_df, 
-#                     x='Metric', 
-#                     y='Value', 
-#                     color='Color',
-#                     color_discrete_map={'Student Score': '#ffb703', 'Threshold': '#e63946'},
-#                     title=f"Overall Average Mark: {avg_mark:.1f}"
-#                 )
-#                 fig_ass_bar.update_layout(
-#                     yaxis_title="Score", 
-#                     height=350, 
-#                     margin=dict(t=50, b=5, l=5, r=5),
-#                     yaxis_range=[0, 100]
-#                 )
-#                 st.plotly_chart(fig_ass_bar, use_container_width=True)
+                fig_ass_bar = px.bar(
+                    bar_df, 
+                    x='Metric', 
+                    y='Value', 
+                    color='Color',
+                    color_discrete_map={'Student Score': '#ffb703', 'Threshold': '#e63946'},
+                    title=f"Overall Average Mark: {avg_mark:.1f}"
+                )
+                fig_ass_bar.update_layout(
+                    yaxis_title="Score", 
+                    height=350, 
+                    margin=dict(t=50, b=5, l=5, r=5),
+                    yaxis_range=[0, 100]
+                )
+                st.plotly_chart(fig_ass_bar, use_container_width=True)
 
-#         with chart_col3:
-#             st.markdown("##### 3. Fee Payment Status 💰 (Donut Chart)")
+        with chart_col3:
+            st.markdown("##### 3. Fee Payment Status 💰 (Donut Chart)")
 
-#             paid_ratio = stu_data.get('fee_paid_ratio', 1.0)
-#             unpaid_ratio = 1.0 - paid_ratio
+            paid_ratio = stu_data.get('fee_paid_ratio', 1.0)
+            unpaid_ratio = 1.0 - paid_ratio
             
-#             fee_data_for_chart = pd.DataFrame({
-#                 'Status': ['Fee Paid', 'Fee Unpaid'],
-#                 'Ratio': [paid_ratio, unpaid_ratio]
-#             })
+            fee_data_for_chart = pd.DataFrame({
+                'Status': ['Fee Paid', 'Fee Unpaid'],
+                'Ratio': [paid_ratio, unpaid_ratio]
+            })
             
-#             color_map = {'Fee Paid': '#28a745', 'Fee Unpaid': '#dc3545'} 
+            color_map = {'Fee Paid': '#28a745', 'Fee Unpaid': '#dc3545'} 
             
-#             fig_fee = px.pie(
-#                 fee_data_for_chart, 
-#                 values='Ratio', 
-#                 names='Status', 
-#                 color='Status',
-#                 color_discrete_map=color_map,
-#                 title='Fee Paid vs. Unpaid Ratio'
-#             )
+            fig_fee = px.pie(
+                fee_data_for_chart, 
+                values='Ratio', 
+                names='Status', 
+                color='Status',
+                color_discrete_map=color_map,
+                title='Fee Paid vs. Unpaid Ratio'
+            )
             
-#             fig_fee.update_traces(
-#                 hole=.4, 
-#                 textinfo='percent', 
-#                 marker=dict(line=dict(color='#000000', width=1))
-#             ) 
+            fig_fee.update_traces(
+                hole=.4, 
+                textinfo='percent', 
+                marker=dict(line=dict(color='#000000', width=1))
+            ) 
             
-#             fig_fee.update_layout(
-#                 height=350, 
-#                 margin=dict(t=50, b=5, l=5, r=5),
-#                 showlegend=True,
-#                 legend=dict(orientation="h", y=-0.1) 
-#             )
-#             st.plotly_chart(fig_fee, use_container_width=True)
+            fig_fee.update_layout(
+                height=350, 
+                margin=dict(t=50, b=5, l=5, r=5),
+                showlegend=True,
+                legend=dict(orientation="h", y=-0.1) 
+            )
+            st.plotly_chart(fig_fee, use_container_width=True)
 
-#         with chart_col4:
-#             st.markdown("##### 4. Overall Risk Profile 🕸 (Radar Chart)")
+        with chart_col4:
+            st.markdown("##### 4. Overall Risk Profile 🕸 (Radar Chart)")
             
-#             if 'att_factor' in stu_data and 'ass_factor' in stu_data:
-#                 categories = ['Attendance', 'Assessment', 'Fees', 'Attempts']
-#                 values = [
-#                     stu_data['att_factor'],
-#                     stu_data['ass_factor'],
-#                     stu_data['fee_factor'],
-#                     stu_data['attempts_factor']
-#                 ]
+            if 'att_factor' in stu_data and 'ass_factor' in stu_data:
+                categories = ['Attendance', 'Assessment', 'Fees', 'Attempts']
+                values = [
+                    stu_data['att_factor'],
+                    stu_data['ass_factor'],
+                    stu_data['fee_factor'],
+                    stu_data['attempts_factor']
+                ]
                 
-#                 values = values + values[:1] 
-#                 categories = categories + categories[:1]
+                values = values + values[:1] 
+                categories = categories + categories[:1]
 
-#                 fig_radar = go.Figure(data=[
-#                     go.Scatterpolar(
-#                         r=values,
-#                         theta=categories,
-#                         fill='toself',
-#                         name=stu_data['Name'],
-#                         line_color=risk_colors.get(stu_data_risk_name, 'gray'),
-#                         marker={'color': risk_colors.get(stu_data_risk_name, 'gray')}
-#                     )
-#                 ])
+                fig_radar = go.Figure(data=[
+                    go.Scatterpolar(
+                        r=values,
+                        theta=categories,
+                        fill='toself',
+                        name=stu_data['Name'],
+                        line_color=risk_colors.get(stu_data_risk_name, 'gray'),
+                        marker={'color': risk_colors.get(stu_data_risk_name, 'gray')}
+                    )
+                ])
 
-#                 fig_radar.update_layout(
-#                     polar=dict(
-#                         radialaxis=dict(
-#                             visible=True,
-#                             range=[0, 1] 
-#                         )),
-#                     showlegend=False,
-#                     title_text="Risk Profile (0=Low Risk, 1=High Risk)",
-#                     height=350,
-#                     margin=dict(t=50, b=5, l=5, r=5)
-#                 )
-#                 st.plotly_chart(fig_radar, use_container_width=True)
-#             else:
-#                 st.warning("Risk factor breakdown not available. (Heuristic model factors missing)")
+                fig_radar.update_layout(
+                    polar=dict(
+                        radialaxis=dict(
+                            visible=True,
+                            range=[0, 1] 
+                        )),
+                    showlegend=False,
+                    title_text="Risk Profile (0=Low Risk, 1=High Risk)",
+                    height=350,
+                    margin=dict(t=50, b=5, l=5, r=5)
+                )
+                st.plotly_chart(fig_radar, use_container_width=True)
+            else:
+                st.warning("Risk factor breakdown not available. (Heuristic model factors missing)")
 
-#         st.markdown("---")
-#         st.markdown("### Cohort Analysis: Student Performance Distribution")
+        st.markdown("---")
+        st.markdown("### Cohort Analysis: Student Performance Distribution")
         
-#         df_for_chart = results_to_show.copy()
+        df_for_chart = results_to_show.copy()
         
-#         risk_map_rev = {"🟢": "Low Risk", "🟡": "Medium Risk", "🔴": "High Risk"}
-#         df_for_chart['Risk_Name'] = df_for_chart['Risk_Level'].map(risk_map_rev)
+        risk_map_rev = {"🟢": "Low Risk", "🟡": "Medium Risk", "🔴": "High Risk"}
+        df_for_chart['Risk_Name'] = df_for_chart['Risk_Level'].map(risk_map_rev)
 
-#         category_order = ["Low Risk", "Medium Risk", "High Risk"]
-#         df_for_box_plot = df_for_chart[df_for_chart['avg_all_marks'] > 0].copy()
+        category_order = ["Low Risk", "Medium Risk", "High Risk"]
+        df_for_box_plot = df_for_chart[df_for_chart['avg_all_marks'] > 0].copy()
 
-#         if not df_for_box_plot.empty:
-#             st.markdown("##### 5. Assessment Score Distribution by Risk Level (Box Plot)")
-#             risk_color_map = {"Low Risk": "green", "Medium Risk": "gold", "High Risk": "red"}
-#             df_for_box_plot['Risk_Name'] = pd.Categorical(df_for_box_plot['Risk_Name'], categories=category_order, ordered=True)
-#             df_for_box_plot = df_for_box_plot.sort_values('Risk_Name')
+        if not df_for_box_plot.empty:
+            st.markdown("##### 5. Assessment Score Distribution by Risk Level (Box Plot)")
+            risk_color_map = {"Low Risk": "green", "Medium Risk": "gold", "High Risk": "red"}
+            df_for_box_plot['Risk_Name'] = pd.Categorical(df_for_box_plot['Risk_Name'], categories=category_order, ordered=True)
+            df_for_box_plot = df_for_box_plot.sort_values('Risk_Name')
 
-#             fig_box = px.box(
-#                 df_for_box_plot,
-#                 x='Risk_Name',
-#                 y='avg_all_marks',
-#                 color='Risk_Name',
-#                 category_orders={"Risk_Name": category_order},
-#                 color_discrete_map=risk_color_map,
-#                 title="Distribution of Average Assessment Scores Across Risk Levels",
-#                 labels={
-#                     'avg_all_marks': 'Average Assessment Score (0-100)',
-#                     'Risk_Name': 'Predicted Dropout Risk Level'
-#                 },
-#                 height=550
-#             )
+            fig_box = px.box(
+                df_for_box_plot,
+                x='Risk_Name',
+                y='avg_all_marks',
+                color='Risk_Name',
+                category_orders={"Risk_Name": category_order},
+                color_discrete_map=risk_color_map,
+                title="Distribution of Average Assessment Scores Across Risk Levels",
+                labels={
+                    'avg_all_marks': 'Average Assessment Score (0-100)',
+                    'Risk_Name': 'Predicted Dropout Risk Level'
+                },
+                height=550
+            )
 
-#             score_threshold_val = config.get('score_threshold', 0.4) * 100
+            score_threshold_val = config.get('score_threshold', 0.4) * 100
             
-#             fig_box.add_hline(
-#                 y=score_threshold_val, 
-#                 line_width=1.5, 
-#                 line_dash="dash", 
-#                 line_color="darkblue",
-#                 annotation_text=f"Passing Threshold ({score_threshold_val:.0f})",
-#                 annotation_position="top right"
-#             )
+            fig_box.add_hline(
+                y=score_threshold_val, 
+                line_width=1.5, 
+                line_dash="dash", 
+                line_color="darkblue",
+                annotation_text=f"Passing Threshold ({score_threshold_val:.0f})",
+                annotation_position="top right"
+            )
 
-#             fig_box.update_layout(
-#                 yaxis_range=[0, df_for_box_plot['avg_all_marks'].max() * 1.05],
-#                 showlegend=False
-#             )
+            fig_box.update_layout(
+                yaxis_range=[0, df_for_box_plot['avg_all_marks'].max() * 1.05],
+                showlegend=False
+            )
 
-#             st.plotly_chart(fig_box, use_container_width=True)
+            st.plotly_chart(fig_box, use_container_width=True)
 
-#         else:
-#             st.warning("Cannot display score distribution (Box Plot): Average marks are zero or missing for most students. Falling back to simple Risk Score comparison.")
-#             st.markdown("##### 5. Student Risk Score Comparison (Bar Chart)")
+        else:
+            st.warning("Cannot display score distribution (Box Plot): Average marks are zero or missing for most students. Falling back to simple Risk Score comparison.")
+            st.markdown("##### 5. Student Risk Score Comparison (Bar Chart)")
 
-#             df_for_chart['Name_Roll'] = df_for_chart['Name'] + ' (' + df_for_chart['Roll_no'].astype(str) + ')'
+            df_for_chart['Name_Roll'] = df_for_chart['Name'] + ' (' + df_for_chart['Roll_no'].astype(str) + ')'
             
-#             df_sorted = df_for_chart.sort_values('Risk_Score', ascending=False)
+            df_sorted = df_for_chart.sort_values('Risk_Score', ascending=False)
             
-#             risk_color_map = {"Low Risk": "green", "Medium Risk": "gold", "High Risk": "red"}
+            risk_color_map = {"Low Risk": "green", "Medium Risk": "gold", "High Risk": "red"}
 
-#             fig_bar = px.bar(
-#                 df_sorted,
-#                 x='Name_Roll',
-#                 y='Risk_Score',
-#                 color='Risk_Name',
-#                 color_discrete_map=risk_color_map,
-#                 title="Individual Student Risk Scores (0 to 1)",
-#                 labels={
-#                     'Name_Roll': 'Student',
-#                     'Risk_Score': 'Dropout Risk Score (0 = Low, 1 = High)'
-#                 },
-#                 height=550
-#             )
+            fig_bar = px.bar(
+                df_sorted,
+                x='Name_Roll',
+                y='Risk_Score',
+                color='Risk_Name',
+                color_discrete_map=risk_color_map,
+                title="Individual Student Risk Scores (0 to 1)",
+                labels={
+                    'Name_Roll': 'Student',
+                    'Risk_Score': 'Dropout Risk Score (0 = Low, 1 = High)'
+                },
+                height=550
+            )
 
-#             fig_bar.add_hline(y=0.7, line_dash="dash", line_color="red", annotation_text="High Risk Threshold", annotation_position="top left")
-#             fig_bar.add_hline(y=0.4, line_dash="dash", line_color="gold", annotation_text="Medium Risk Threshold", annotation_position="top left")
+            fig_bar.add_hline(y=0.7, line_dash="dash", line_color="red", annotation_text="High Risk Threshold", annotation_position="top left")
+            fig_bar.add_hline(y=0.4, line_dash="dash", line_color="gold", annotation_text="Medium Risk Threshold", annotation_position="top left")
 
-#             fig_bar.update_layout(
-#                 xaxis={'categoryorder':'array', 'categoryarray': df_sorted['Name_Roll'].tolist()},
-#                 xaxis_tickangle=-45,
-#                 showlegend=True,
-#                 margin=dict(b=100)
-#             )
+            fig_bar.update_layout(
+                xaxis={'categoryorder':'array', 'categoryarray': df_sorted['Name_Roll'].tolist()},
+                xaxis_tickangle=-45,
+                showlegend=True,
+                margin=dict(b=100)
+            )
 
-#             st.plotly_chart(fig_bar, use_container_width=True)
+            st.plotly_chart(fig_bar, use_container_width=True)
 
-#     else:
-#         st.info("Please upload all required files and ensure data is properly structured to see the dashboard.")
+    else:
+        st.info("Please upload all required files and ensure data is properly structured to see the dashboard.")
