@@ -1,3 +1,4 @@
+
 import requests
 import io
 import pandas as pd
@@ -14,8 +15,8 @@ from sklearn.impute import SimpleImputer
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, accuracy_score, precision_score, recall_score, f1_score
 from sklearn.utils.class_weight import compute_class_weight
 from sklearn.calibration import CalibratedClassifierCV
+import joblib
 import warnings
-from Dashboard import config
 warnings.filterwarnings('ignore')
 
 try:
@@ -23,18 +24,22 @@ try:
         'train_attendance': pd.read_csv("TrainData/train_attendance.csv"),
         'train_fees': pd.read_csv("TrainData/train_fees.csv"),
         'train_students': pd.read_csv("TrainData/train_students.csv"),
-        'train_assessment_physics' : pd.read_csv("TrainData/train_assessment/train_assessment_Physics.csv"),
-        'train_assessment_biology' : pd.read_csv("TrainData/train_assessment/train_assessment_Biology.csv"),
-        'train_assessment_maths' : pd.read_csv("TrainData/train_assessment/train_assessment_Maths (1).csv"),
-        'train_assessment_english' : pd.read_csv("TrainData/train_assessment/train_assessment_English.csv"),
-        'train_assessment_chemistry' : pd.read_csv("TrainData/train_assessment/train_assessment_Chemistry.csv"),
-        'train_assessment_geography' : pd.read_csv("TrainData/train_assessment/train_assessment_Geography.csv"),
-        'train_assessment_history' : pd.read_csv("TrainData/train_assessment/train_assessment_History.csv"),
+        'train_assessment_physics' : pd.read_csv("TrainData/train_assessment_Physics.csv"),
+        'train_assessment_biology' : pd.read_csv("TrainData/train_assessment_Biology.csv"),
+        'train_assessment_maths' : pd.read_csv("TrainData/train_assessment_Maths.csv"),
+        'train_assessment_english' : pd.read_csv("TrainData/train_assessment_English.csv"),
+        'train_assessment_chemistry' : pd.read_csv("TrainData/train_assessment_Chemistry.csv"),
+        'train_assessment_geography' : pd.read_csv("TrainData/train_assessment_Geography.csv"),
+        'train_assessment_history' : pd.read_csv("TrainData/train_assessment_History.csv"),
     }
     print("All files loaded successfully!")
 
 except FileNotFoundError as e:
     print(f"Error loading files: {e}")
+
+print("\n📊 Data shapes:")
+for key, df in data.items():
+    print(f"   {key}: {df.shape}")
 
 # Function to calculate failed attempts dynamically
 def calculate_failed_attempts_dynamically(df, subject_name):
@@ -49,11 +54,12 @@ def calculate_failed_attempts_dynamically(df, subject_name):
         failed_count = 0
         for mst_col in mst_cols:
             mark = row[mst_col]
-            if pd.notna(mark) and mark < config['score_threshold']:
+            if pd.notna(mark) and mark < 40:
                 failed_count += 1
         failed_attempts.append(failed_count)
 
     return failed_attempts
+
 
 # Combine train assessment data
 print("\n🔄 Combining train assessment data...")
@@ -74,11 +80,6 @@ for subject in train_subjects:
         failed_attempts = calculate_failed_attempts_dynamically(df, subject)
         if failed_attempts is not None:
             df[f'Failed_Attempts_{subject}'] = failed_attempts
-
-        # Calculate best of two for train data
-        # best_of_two = calculate_best_of_two(df, subject)
-        # if best_of_two is not None:
-        #     df[f'Best_of_2_{subject}'] = best_of_two
 
         if train_assessment_combined is None:
             train_assessment_combined = df
@@ -139,7 +140,7 @@ def create_fee_features(fees_df):
     fee_features['payment_delay_days'] = (fee_features['Payment Date'] - fee_features['Last Date']).dt.days
     fee_features['payment_on_time'] = (fee_features['payment_delay_days'] <= 0).astype(int)
     fee_features['payment_delayed'] = (fee_features['payment_delay_days'] > 0).astype(int)
-    fee_features['severely_delayed'] = (fee_features['payment_delay_days'] >config['fee_overdue_days']).astype(int)
+    fee_features['severely_delayed'] = (fee_features['payment_delay_days'] > 30).astype(int)
 
     return fee_features[['Roll_no', 'fee_paid_ratio', 'fee_balance', 'fee_balance_ratio',
                        'payment_delay_days', 'payment_on_time', 'payment_delayed', 'severely_delayed']]
@@ -162,8 +163,8 @@ def create_attendance_features(attendance_df):
         else:
             attendance_features['attendance_percentage'] = 100
 
-    attendance_features['low_attendance'] = (attendance_features['attendance_percentage'] < config['att_threshold']).astype(int)
-    attendance_features['very_low_attendance'] = (attendance_features['attendance_percentage'] < config['att_threshold']-15).astype(int)
+    attendance_features['low_attendance'] = (attendance_features['attendance_percentage'] < 75).astype(int)
+    attendance_features['very_low_attendance'] = (attendance_features['attendance_percentage'] < 60).astype(int)
     attendance_features['attendance_trend'] = attendance_features['attendance_percentage'] / 100
 
     return attendance_features[['Roll_no', 'attendance_percentage', 'low_attendance', 'very_low_attendance', 'attendance_trend']]
@@ -180,13 +181,13 @@ def create_student_demographic_features(students_df):
     demo_features['contact_length'] = demo_features['Contact No.'].astype(str).str.len()
 
     # Email
-    demo_features['email_domain'] = demo_features['Student Email'].str.split('@').str[1]
+    demo_features['email_domain'] = demo_features['Student_Email'].str.split('@').str[1]
 
     # Gender
     demo_features['is_female'] = (demo_features['Gender'] == 'Female').astype(int)
 
     # Parent email
-    demo_features['parent_email_domain'] = demo_features['Parent Email'].str.split('@').str[1]
+    demo_features['parent_email_domain'] = demo_features['Parent_Email'].str.split('@').str[1]
 
     return demo_features[['Roll_no', 'Gender', 'age', 'contact_length', 'email_domain', 'is_female', 'parent_email_domain']]
 
@@ -197,11 +198,12 @@ def create_target_variable(df, base_dropout_rate=0.15):
 
     dropout_proba = np.ones(len(df)) * base_dropout_rate
 
+
     feature_weights = {
         'total_failed_attempts': 0.3,
         'attendance_percentage': 0.2,
         'fee_paid_ratio': 0.2,
-        f'marks_below_{config['score_threshold']*100}': 0.15,
+        'marks_below_40': 0.15,
         'payment_delay_days': 0.1,
         'std_all_marks': 0.05
     }
@@ -392,15 +394,18 @@ print(f"📈 Best CV ROC-AUC: {model_performance[best_model_name]['cv_roc_auc_me
 
 
 
+
 calibrated_model = CalibratedClassifierCV(best_model, cv=5, method='isotonic')
 calibrated_model.fit(X_train, y_train)
 
 
-import pickle
+# Save the calibrated model
+joblib.dump(calibrated_model, "calibrated_model.pkl")
 
-with open("best_model.pkl", "wb") as f:
-    pickle.dump(best_model, f)
+print("✅ Model saved as calibrated_model.pkl")
 
-with open("calibrated_model.pkl", "wb") as f:
-    pickle.dump(best_model, f)
+
+
+
+
 

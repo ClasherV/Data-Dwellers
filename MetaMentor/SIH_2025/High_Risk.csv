@@ -1,0 +1,101 @@
+Roll_no,Name,Dropout_Probability,Dropout_Probability_Percentage,Risk_Level,Risk_Score,attendance_percentage,fee_paid_ratio,total_failed_attempts,avg_all_marks,subjects_with_failures,payment_delay_days,marks_below_40,failure_rate,low_attendance,very_low_attendance,Recommendations
+1,Aayush Rama,0.5721949464051725,57.22,Medium Risk,2,66.667,0.874,10,47.714,6,15,10,0.476,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+2,Heer Kalla,0.48094411774157264,48.09,Low Risk,1,40.0,0.568,4,63.762,4,119,4,0.19,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+3,Arhaan Borde,0.6414220571509575,64.14,Medium Risk,2,63.333,0.07,4,57.905,4,-25,4,0.19,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+4,Anahita Singh,0.6034497760304212,60.34,Medium Risk,2,53.333,0.24,7,54.619,6,-125,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+5,Khushi Zacharia,0.6202937301402776,62.03,Medium Risk,2,33.333,0.182,6,54.429,5,-77,6,0.286,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+6,Ishita Datta,0.7461176784879451,74.61,High Risk,3,50.0,0.362,10,44.238,6,39,10,0.476,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required; Payment discipline needed
+7,Farhan Ahuja,0.4029498897473446,40.29,Low Risk,1,53.333,0.781,5,57.286,5,-74,5,0.238,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+8,Indranil Soman,0.766117678487945,76.61,High Risk,3,50.0,0.774,15,36.381,7,91,15,0.714,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required; Payment discipline needed
+9,Mishti Desai,0.7088627765271607,70.89,High Risk,3,36.667,0.673,7,45.714,4,-263,7,0.333,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+10,Ivan Bala,0.9260869565217391,92.61,High Risk,3,43.333,0.03,8,49.476,5,5,8,0.381,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+11,Divij Ramanathan,0.6624010781299784,66.24,Medium Risk,2,56.667,0.27,9,43.81,6,-35,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+12,Vedika Bandi,0.6817957125559345,68.18,Medium Risk,2,56.667,0.186,10,48.524,6,-166,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+13,Advik Kaur,0.6005362454954073,60.05,Medium Risk,2,56.667,0.56,7,53.429,5,108,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+14,Nitara Chakrabarti,0.5922413146198312,59.22,Medium Risk,2,40.0,0.446,7,55.048,5,-145,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+15,Parinaaz Sangha,0.5653927225279985,56.54,Medium Risk,2,36.667,0.797,7,52.667,6,-19,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+16,Rania Mangat,0.6974660131949134,69.75,Medium Risk,2,43.333,0.095,8,51.19,6,-118,8,0.381,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+17,Jayesh Kapur,0.5812485553662025,58.12,Medium Risk,2,60.0,0.439,10,40.429,6,-197,10,0.476,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+18,Kabir Bhatt,0.6725192765890589,67.25,Medium Risk,2,46.667,0.327,7,53.429,4,-236,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+19,Aayush Swamy,0.6906348936503214,69.06,Medium Risk,2,36.667,0.142,7,49.048,5,-3,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+20,Yuvaan Batra,0.6315809041615493,63.16,Medium Risk,2,56.667,0.681,9,51.762,6,48,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+21,Zain Kala,0.47558250897515286,47.56,Low Risk,1,66.667,0.914,7,51.571,4,8,7,0.333,1,0,Monitor attendance regularly; Focus on academic improvement
+22,Akarsh Chaudry,0.7261176784879451,72.61,High Risk,3,43.333,0.142,9,44.429,5,70,9,0.429,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required; Payment discipline needed
+23,Diya Trivedi,0.6984924061567902,69.85,Medium Risk,2,33.333,0.054,7,45.238,5,40,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+24,Azad Saran,0.6067188310348628,60.67,Medium Risk,2,50.0,0.459,7,51.714,4,263,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+25,Zain Devi,0.746117678487945,74.61,High Risk,3,40.0,0.191,6,49.571,3,-62,6,0.286,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+26,Ira Sarraf,0.510625435945129,51.06,Medium Risk,2,56.667,0.504,5,55.571,3,-215,5,0.238,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+27,Indranil Jayaraman,0.6585363438304614,65.85,Medium Risk,2,30.0,0.94,11,45.857,7,-213,11,0.524,1,1,Monitor attendance regularly; Focus on academic improvement
+28,Shlok Walia,0.6974660131949134,69.75,Medium Risk,2,50.0,0.917,11,46.619,5,-60,11,0.524,1,1,Monitor attendance regularly; Focus on academic improvement
+29,Charvi Vala,0.607051903750196,60.71,Medium Risk,2,46.667,0.439,10,51.048,6,217,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+30,Anay Kapur,0.5329439997220982,53.29,Medium Risk,2,66.667,0.253,10,45.81,6,-76,10,0.476,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+31,Hrishita Edwin,0.5066339869281047,50.66,Medium Risk,2,56.667,0.798,7,55.571,4,-101,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+32,Saksham Thakkar,0.6448926606215608,64.49,Medium Risk,2,43.333,0.172,10,48.619,6,-307,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+33,Ira Bail,0.645287197867843,64.53,Medium Risk,2,40.0,0.418,6,52.619,5,27,6,0.286,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+34,Taran Balan,0.600953266682167,60.1,Medium Risk,2,56.667,0.479,7,50.19,5,-197,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+35,Lavanya Raman,0.5993846392311866,59.94,Medium Risk,2,53.333,0.12,5,63.667,4,-106,5,0.238,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+36,Samaira Walia,0.5925535196865945,59.26,Medium Risk,2,26.667,0.42,9,48.952,4,-184,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+37,Suhana Jayaraman,0.08288318477232243,8.29,Low Risk,1,60.0,0.591,6,51.952,5,-250,6,0.286,1,0,No immediate action required
+38,Saanvi Bala,0.6951260681539877,69.51,Medium Risk,2,56.667,0.639,10,42.095,6,-154,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+39,Mamooty Dave,0.664048811627654,66.4,Medium Risk,2,60.0,0.296,9,52.238,5,58,9,0.429,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+40,Hansh Mangal,0.5903929403929404,59.04,Medium Risk,2,56.667,0.442,7,51.429,6,-70,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+41,Riaan Rau,0.6625382478918989,66.25,Medium Risk,2,43.333,0.311,11,43.429,6,116,11,0.524,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+42,Kaira Sule,0.5193994506014966,51.94,Medium Risk,2,46.667,0.85,6,57.619,5,81,6,0.286,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+43,Reyansh Badal,0.586930895286099,58.69,Medium Risk,2,36.667,0.108,7,51.143,6,-131,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+44,Shalv Kapadia,0.6424334707890499,64.24,Medium Risk,2,56.667,0.141,10,46.619,6,-250,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+45,Siya Ahuja,0.746117678487945,74.61,High Risk,3,40.0,0.274,9,50.524,5,21,9,0.429,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+46,Trisha Gade,0.2754895722870272,27.55,Low Risk,1,60.0,0.718,9,49.429,6,-73,9,0.429,1,0,No immediate action required
+47,Mehul Roy,0.6624010781299784,66.24,Medium Risk,2,53.333,0.399,10,46.143,6,-15,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+48,Samaira Ramaswamy,0.62391363964254,62.39,Medium Risk,2,56.667,0.831,10,43.333,6,-270,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+49,Biju Upadhyay,0.5767108424397427,57.67,Medium Risk,2,50.0,0.742,6,51.619,3,-209,6,0.286,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+50,Uthkarsh Trivedi,0.5220591003199698,52.21,Medium Risk,2,53.333,0.751,11,44.095,7,69,11,0.524,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+51,Chirag Goyal,0.47124765478424013,47.12,Low Risk,1,60.0,0.826,9,45.286,5,116,9,0.429,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+52,Rasha Khatri,0.3485324273658903,34.85,Low Risk,1,36.667,0.843,6,58.524,5,-166,6,0.286,1,1,No immediate action required
+53,Taran Wali,0.6368205599650915,63.68,Medium Risk,2,43.333,0.047,10,52.0,6,50,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+54,Pranay Maharaj,0.6106718132524585,61.07,Medium Risk,2,53.333,0.77,9,45.714,5,-123,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+55,Hridaan Jayaraman,0.7251365591051128,72.51,High Risk,3,30.0,0.001,13,35.143,7,-58,13,0.619,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+56,Jivika Kibe,0.33906100085845575,33.91,Low Risk,1,60.0,0.383,9,54.19,7,-31,9,0.429,1,0,No immediate action required
+57,Taran Manda,0.4717726220923152,47.18,Low Risk,1,66.667,0.735,7,50.143,5,150,7,0.333,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+58,Vaibhav Kashyap,0.6798407858774692,67.98,Medium Risk,2,33.333,0.243,9,48.238,6,-43,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+59,Mannat Rajan,0.6874342050985892,68.74,Medium Risk,2,46.667,0.489,9,43.857,5,66,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+60,Vaibhav Chakraborty,0.661224572671372,66.12,Medium Risk,2,56.667,0.39,10,43.857,7,233,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+61,Divyansh Dutt,0.529061901440418,52.91,Medium Risk,2,53.333,0.604,5,60.19,3,-68,5,0.238,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+62,Hrishita Barad,0.637802147648695,63.78,Medium Risk,2,50.0,0.077,8,50.524,6,161,8,0.381,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+63,Anya Mani,0.5746935682485554,57.47,Medium Risk,2,46.667,0.698,9,46.524,7,81,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+64,Taimur Bumb,0.612148933760187,61.21,Medium Risk,2,40.0,0.728,8,50.476,5,-229,8,0.381,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+65,Nirvi Golla,0.7261176784879451,72.61,High Risk,3,53.333,0.229,11,42.048,6,-184,11,0.524,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+66,Mannat Kuruvilla,0.4616382173004271,46.16,Low Risk,1,60.0,0.717,7,53.286,6,237,7,0.333,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+67,Stuvan Rajagopalan,0.6634274710918552,66.34,Medium Risk,2,56.667,0.603,11,35.333,7,42,11,0.524,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+68,Tiya Dugar,0.5594966840491137,55.95,Medium Risk,2,46.667,0.877,7,51.286,5,-68,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+69,Armaan Ram,0.5250225668556574,52.5,Medium Risk,2,53.333,0.855,9,54.857,4,-41,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+70,Parinaaz Dutt,0.48094411774157264,48.09,Low Risk,1,30.0,0.657,6,54.952,3,-5,6,0.286,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+71,Anika Divan,0.6296573512686046,62.97,Medium Risk,2,46.667,0.789,8,43.857,5,11,8,0.381,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+72,Ritvik Bajwa,0.5001345755693583,50.01,Medium Risk,2,36.667,0.7,10,49.095,5,-148,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+73,Pari Kamdar,0.5491463017269469,54.91,Medium Risk,2,33.333,0.323,6,60.19,4,-190,6,0.286,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+74,Advik Loke,0.6700737224439889,67.01,Medium Risk,2,60.0,0.207,11,44.619,5,-121,11,0.524,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+75,Anahi Mann,0.3615040650406504,36.15,Low Risk,1,56.667,0.918,7,57.714,6,-63,7,0.333,1,1,No immediate action required
+76,Mamooty Bains,0.5628580285869289,56.29,Medium Risk,2,50.0,0.858,9,48.238,6,-144,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+77,Ranbir Sharma,0.69105274342301,69.11,Medium Risk,2,50.0,0.41,9,49.857,5,-21,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+78,Himmat Saini,0.5925535196865945,59.26,Medium Risk,2,43.333,0.241,9,50.952,5,-74,9,0.429,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+79,Mahika Bajaj,0.6476263388028094,64.76,Medium Risk,2,43.333,0.062,7,47.857,6,-220,7,0.333,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+80,Pari Korpal,0.630971028104103,63.1,Medium Risk,2,46.667,0.124,10,47.952,6,-54,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+81,Keya Majumdar,0.6624010781299784,66.24,Medium Risk,2,46.667,0.897,10,43.476,6,-165,10,0.476,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+82,Samaira Sidhu,0.6017046429901882,60.17,Medium Risk,2,43.333,0.709,11,47.238,5,-27,11,0.524,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+83,Tiya Kalla,0.5359119141727837,53.59,Medium Risk,2,66.667,0.41,8,49.952,5,-241,8,0.381,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+84,Samaira Mangat,0.5493166963755198,54.93,Medium Risk,2,60.0,0.59,9,55.0,6,-21,9,0.429,1,0,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+85,Mahika Singh,0.7157473081175746,71.57,High Risk,3,56.667,0.313,13,32.667,7,131,13,0.619,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required; Payment discipline needed
+86,Yashvi Chopra,0.8141821946169772,81.42,High Risk,3,53.333,0.495,13,37.095,7,-66,13,0.619,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+87,Riaan Doctor,0.4721798936647912,47.22,Low Risk,1,46.667,0.985,7,50.19,4,-193,7,0.333,1,1,Monitor attendance regularly; Focus on academic improvement
+88,Himmat Dugar,0.630971028104103,63.1,Medium Risk,2,53.333,0.148,6,52.524,6,-115,6,0.286,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+89,Mishti Dhar,0.529061901440418,52.91,Medium Risk,2,43.333,0.899,8,49.81,6,34,8,0.381,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+90,Vidur Upadhyay,0.529061901440418,52.91,Medium Risk,2,43.333,0.923,8,53.095,5,81,8,0.381,1,1,Monitor attendance regularly; Focus on academic improvement
+91,Rania Yogi,0.6624010781299784,66.24,Medium Risk,2,30.0,0.954,9,45.0,5,-30,9,0.429,1,1,Monitor attendance regularly; Focus on academic improvement
+92,Prerak Sama,0.5952881119864042,59.53,Medium Risk,2,50.0,0.645,5,56.333,3,138,5,0.238,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+93,Rati Issac,0.6984924061567902,69.85,Medium Risk,2,50.0,0.726,12,38.095,6,-98,12,0.571,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+94,Shaan Rajagopalan,0.7261176784879451,72.61,High Risk,3,30.0,0.579,10,41.429,6,-161,10,0.476,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+95,Kiaan Bala,0.6134626105956855,61.35,Medium Risk,2,56.667,0.103,6,59.286,6,-89,6,0.286,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement
+96,Gatik Som,0.5952881119864042,59.53,Medium Risk,2,46.667,0.915,8,50.238,4,139,8,0.381,1,1,Monitor attendance regularly; Focus on academic improvement
+97,Abram Karpe,0.6136818466972744,61.37,Medium Risk,2,43.333,0.976,10,46.333,5,40,10,0.476,1,1,Monitor attendance regularly; Focus on academic improvement
+98,Faiyaz Sachar,0.7020316569825686,70.2,High Risk,3,33.333,0.041,8,44.333,6,-30,8,0.381,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required
+99,Miraya Mangal,0.7154987212276215,71.55,High Risk,3,50.0,0.057,8,51.952,6,48,8,0.381,1,1,Improve attendance immediately; Clear pending fees; Academic counseling required; Payment discipline needed
+100,Eshani Kota,0.5466339869281046,54.66,Medium Risk,2,56.667,0.673,8,52.381,6,-250,8,0.381,1,1,Monitor attendance regularly; Ensure fee payments are timely; Focus on academic improvement

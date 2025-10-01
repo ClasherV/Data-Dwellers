@@ -364,7 +364,8 @@ with tab2:
     results_to_show = None 
     master_df = None 
 
-    if required_files_present:
+    if True:
+    # if required_files_present:
         st.header("🎓 Dropout Risk Prediction Table")
         st.write("⚙ Running model/heuristic...")
         try:

@@ -29,21 +29,5 @@ def upload_file():
     return jsonify({"message": "File uploaded successfully", "path": filepath}), 200
 
 
-
-@app.route("/save_config", methods=["POST"])
-def save_config():
-    try:
-        config = request.json  # Receive config dict
-
-        # Save it as config.json in the same folder
-        with open("config.json", "w") as f:
-            import json
-            json.dump(config, f, indent=4)
-
-        return jsonify({"message": "Config saved successfully"}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

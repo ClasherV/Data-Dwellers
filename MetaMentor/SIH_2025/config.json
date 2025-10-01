@@ -1,10 +1,10 @@
 {
-    "att_threshold": 0.31,
-    "score_threshold": 0.84,
+    "att_threshold": 0.5,
+    "score_threshold": 0.18,
     "fee_overdue_days": 30,
     "max_attempts": 4,
-    "w_att": 0.82,
-    "w_ass": 0.88,
+    "w_att": 0.89,
+    "w_ass": 0.4,
     "w_fee": 0.2,
     "w_fee_delay": 0.1,
     "w_attempts": 0.1
